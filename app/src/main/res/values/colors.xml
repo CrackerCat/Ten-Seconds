@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2979ff</color>
+    <color name="colorPrimaryDark">#0d47a1</color>
+    <color name="colorAccent">#82b1ff</color>
+
+    <color name="colorActionBarTitleLight">#ffffff</color>
+    <color name="colorFloatingActionButton">#e3f2fd</color>
+
+    <color name="colorInputLight">#d0e2ff</color>
+    <color name="colorInputHintLight">#aeccfd</color>
+    <color name="colorInputBackgroundGrey">#b12c6bd4</color>
+</resources>

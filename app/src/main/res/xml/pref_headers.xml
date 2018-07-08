@@ -1,0 +1,10 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="com.gh0u1l5.tenseconds.ui.activities.SettingsActivity$PasswordPreferenceFragment"
+        android:icon="@drawable/ic_lock"
+        android:title="@string/pref_header_generation_rules" />
+
+</preference-headers>

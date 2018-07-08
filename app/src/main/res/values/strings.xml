@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">10s</string>
+
+    <string name="title_activity_main">10 Seconds</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+
+    <!-- Strings related to main activity -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_avatar">User Avatar</string>
+    <string name="nav_header_nickname">Android Studio</string>
+    <string name="nav_header_email">android.studio@android.com</string>
+    <string name="nav_title_settings">Settings</string>
+    <string name="nav_title_exit">Exit</string>
+
+    <!-- Strings related to login activity -->
+    <string name="action_sign_in">Login</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_email">This email is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_login_failed">The username not found or password incorrect.</string>
+
+    <!-- Settings for Password Generator -->
+    <string name="pref_header_generation_rules">Generation Rules</string>
+    <string name="pref_title_generate_algorithm">Dynamic Password Algorithm</string>
+    <string name="pref_summary_generate_algorithm">Choose hash algorithm used to generate dynamic password.</string>
+    <string-array name="pref_generate_algorithm_titles">
+        <item>MD2</item>
+        <item>MD5</item>
+        <item>SHA-1</item>
+        <item>SHA-256</item>
+        <item>SHA-384</item>
+        <item>SHA-512</item>
+    </string-array>
+    <string-array name="pref_generate_algorithm_values">
+        <item>MD2</item>
+        <item>MD5</item>
+        <item>SHA-1</item>
+        <item>SHA-256</item>
+        <item>SHA-384</item>
+        <item>SHA-512</item>
+    </string-array>
+    <string name="pref_title_table_enable_group">Available Character Sets</string>
+    <string name="pref_title_enable_numbers">Numbers</string>
+    <string name="pref_title_enable_symbols">Symbols</string>
+    <string name="pref_title_enable_uppers">Upper Letters</string>
+    <string name="pref_title_enable_lowers">Lower Letters</string>
+</resources>
