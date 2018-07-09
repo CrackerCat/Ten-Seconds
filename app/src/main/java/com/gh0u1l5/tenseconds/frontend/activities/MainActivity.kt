@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.ui.activities
+package com.gh0u1l5.tenseconds.frontend.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import android.view.MenuItem
 import android.widget.TextView
 
 import com.gh0u1l5.tenseconds.R
-import com.gh0u1l5.tenseconds.api.Auth
+import com.gh0u1l5.tenseconds.backend.api.Auth
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*

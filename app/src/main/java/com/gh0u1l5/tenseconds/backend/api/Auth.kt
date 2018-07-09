@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.api
+package com.gh0u1l5.tenseconds.backend.api
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult

@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.ui.activities
+package com.gh0u1l5.tenseconds.frontend.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 
 import com.gh0u1l5.tenseconds.R
-import com.gh0u1l5.tenseconds.api.Auth
+import com.gh0u1l5.tenseconds.backend.api.Auth
 
 import kotlinx.android.synthetic.main.activity_login.*
 

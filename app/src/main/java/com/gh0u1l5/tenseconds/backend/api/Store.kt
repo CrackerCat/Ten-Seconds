@@ -1,7 +1,7 @@
-package com.gh0u1l5.tenseconds.api
+package com.gh0u1l5.tenseconds.backend.api
 
-import com.gh0u1l5.tenseconds.bean.Account
-import com.gh0u1l5.tenseconds.bean.Identity
+import com.gh0u1l5.tenseconds.backend.bean.Account
+import com.gh0u1l5.tenseconds.backend.bean.Identity
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore

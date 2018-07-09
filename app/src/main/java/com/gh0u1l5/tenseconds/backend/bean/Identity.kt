@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.bean
+package com.gh0u1l5.tenseconds.backend.bean
 
 /**
  * This class represents an identity created by the user.

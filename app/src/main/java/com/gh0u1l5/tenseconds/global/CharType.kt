@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.constant
+package com.gh0u1l5.tenseconds.global
 
 object CharType {
     const val NUMBERS: Int       = 0x00000001

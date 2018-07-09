@@ -1,9 +1,9 @@
-package com.gh0u1l5.tenseconds.bean
+package com.gh0u1l5.tenseconds.backend.bean
 
-import com.gh0u1l5.tenseconds.constant.CharType.NUMBERS
-import com.gh0u1l5.tenseconds.constant.CharType.SYMBOLS
-import com.gh0u1l5.tenseconds.constant.CharType.LOWER_LETTERS
-import com.gh0u1l5.tenseconds.constant.CharType.UPPER_LETTERS
+import com.gh0u1l5.tenseconds.global.CharType.NUMBERS
+import com.gh0u1l5.tenseconds.global.CharType.SYMBOLS
+import com.gh0u1l5.tenseconds.global.CharType.LOWER_LETTERS
+import com.gh0u1l5.tenseconds.global.CharType.UPPER_LETTERS
 
 /**
  * This class specifies a password generation process.

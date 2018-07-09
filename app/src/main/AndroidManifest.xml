@@ -12,11 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.gh0u1l5.tenseconds.ui.activities.LoginActivity"
+            android:name="com.gh0u1l5.tenseconds.frontend.activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.gh0u1l5.tenseconds.ui.activities.MainActivity"
+            android:name="com.gh0u1l5.tenseconds.frontend.activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gh0u1l5.tenseconds.ui.activities.SettingsActivity"
+            android:name="com.gh0u1l5.tenseconds.frontend.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme" />
     </application>
