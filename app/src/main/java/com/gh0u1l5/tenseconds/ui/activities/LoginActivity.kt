@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.api.Auth
@@ -22,13 +21,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         // Set up the login form.
-        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
+        password.setOnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
-                return@OnEditorActionListener true
+                return@setOnEditorActionListener true
             }
             false
-        })
+        }
         login_button.setOnClickListener { attemptLogin() }
     }
 
@@ -86,9 +85,9 @@ class LoginActivity : AppCompatActivity() {
             Auth.login {
                 showProgress(true)
                 signInWithEmailAndPassword(emailStr, passwordStr)
-            }?.addOnCompleteListener { task ->
+            }?.addOnCompleteListener {
                 showProgress(false)
-                if (task.isSuccessful) {
+                if (it.isSuccessful) {
                     finish()
                 } else {
                     password.error = getString(R.string.error_login_failed)
