@@ -5,9 +5,14 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -29,6 +34,17 @@ class LoginActivity : AppCompatActivity() {
             false
         }
         login_button.setOnClickListener { attemptLogin() }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+        if (status != ConnectionResult.SUCCESS) {
+            val name = getString(R.string.app_name)
+            val prompt = getString(R.string.common_google_play_services_unsupported_text, name)
+            Toast.makeText(this, prompt, Toast.LENGTH_LONG).show()
+            finishAffinity()
+        }
     }
 
     /**
@@ -87,11 +103,18 @@ class LoginActivity : AppCompatActivity() {
                 signInWithEmailAndPassword(emailStr, passwordStr)
             }?.addOnCompleteListener {
                 showProgress(false)
-                if (it.isSuccessful) {
-                    finish()
-                } else {
-                    password.error = getString(R.string.error_login_failed)
-                    password.requestFocus()
+            }?.addOnSuccessListener {
+                finish()
+            }?.addOnFailureListener {
+                when (it) {
+                    is FirebaseAuthInvalidUserException,
+                    is FirebaseAuthInvalidCredentialsException -> {
+                        password.error = getString(R.string.error_login_failed)
+                        password.requestFocus()
+                    }
+                    else -> {
+                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
