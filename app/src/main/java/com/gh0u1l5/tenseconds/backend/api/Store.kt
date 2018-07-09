@@ -66,7 +66,7 @@ object Store {
     object AccountCollection {
         private fun takeCollection(identityId: String): CollectionReference? {
             val user = Auth.instance.currentUser ?: return null
-            return instance.collection("accounts/${user.uid}/$identityId")
+            return instance.collection("accounts/${user.uid}/$identityId/")
         }
 
         fun fetchAll(identityId: String, success: (Map<String, Account>) -> Unit) {
