@@ -7,7 +7,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceActivity
-import android.preference.PreferenceFragment
+import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.MenuItem
 import com.gh0u1l5.tenseconds.R
 
@@ -65,15 +65,14 @@ class SettingsActivity : AppCompatPreferenceActivity() {
      * Make sure to deny any unknown fragments here.
      */
     override fun isValidFragment(fragmentName: String) = when (fragmentName) {
-        PreferenceFragment::class.java.name -> true
+        PreferenceFragmentCompat::class.java.name -> true
         PasswordPreferenceFragment::class.java.name -> true
         else -> false
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    class PasswordPreferenceFragment : PreferenceFragment() {
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
+    class PasswordPreferenceFragment : PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.pref_generation)
             setHasOptionsMenu(true)
         }
