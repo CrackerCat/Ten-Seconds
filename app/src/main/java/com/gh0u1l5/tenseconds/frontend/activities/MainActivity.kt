@@ -11,10 +11,8 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.TextView
-
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
-
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 

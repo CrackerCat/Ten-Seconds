@@ -1,19 +1,17 @@
 package com.gh0u1l5.tenseconds.frontend.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
-
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**

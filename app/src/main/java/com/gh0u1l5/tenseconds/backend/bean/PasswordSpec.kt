@@ -1,8 +1,8 @@
 package com.gh0u1l5.tenseconds.backend.bean
 
+import com.gh0u1l5.tenseconds.global.CharType.LOWER_LETTERS
 import com.gh0u1l5.tenseconds.global.CharType.NUMBERS
 import com.gh0u1l5.tenseconds.global.CharType.SYMBOLS
-import com.gh0u1l5.tenseconds.global.CharType.LOWER_LETTERS
 import com.gh0u1l5.tenseconds.global.CharType.UPPER_LETTERS
 
 /**

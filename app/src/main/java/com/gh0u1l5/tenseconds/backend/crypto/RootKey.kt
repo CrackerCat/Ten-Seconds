@@ -4,7 +4,6 @@ import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import java.security.Key
-
 import java.security.KeyStore
 import java.security.SecureRandom
 import javax.crypto.Cipher
