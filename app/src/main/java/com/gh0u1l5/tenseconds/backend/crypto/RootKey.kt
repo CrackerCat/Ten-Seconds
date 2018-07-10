@@ -17,7 +17,7 @@ import javax.crypto.spec.GCMParameterSpec
 @Deprecated("The master keys can be imported into Android KeyStore directly.")
 object RootKey {
     private val sAndroidKeyStore by lazy {
-        KeyStore.getInstance("AndroidKeyStore")
+        KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
     }
 
     private val sRootKeyGenerator by lazy {
