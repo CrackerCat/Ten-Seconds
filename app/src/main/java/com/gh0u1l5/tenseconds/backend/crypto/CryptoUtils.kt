@@ -1,9 +1,33 @@
 package com.gh0u1l5.tenseconds.backend.crypto
 
 import java.security.MessageDigest
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
 object CryptoUtils {
+    /**
+     * A [SecretKeyFactory] which can derive a key from a passphrase using PBKDF2WithHmacSHA1.
+     * @hide
+     */
+    private val sPBEKeyFactory by lazy {
+        SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+    }
+
+    /**
+     * Derives a key based on the given specification using PBKDF2WithHmacSHA1.
+     *
+     * @param keySpec The specification that includes passphrase, salt, iteration number and key
+     * length. Notice that this [PBEKeySpec] object will be erased immediately after the operation.
+     */
+    fun deriveKeyWithPBKDF2(keySpec: PBEKeySpec): ByteArray {
+        try {
+            return sPBEKeyFactory.generateSecret(keySpec).encoded
+        } finally {
+            keySpec.clearPassword()
+        }
+    }
+
     /**
      * Erases a ByteArray by filling 0
      */
