@@ -14,6 +14,7 @@ import javax.crypto.spec.GCMParameterSpec
 /**
  * This object wraps all the cryptographic operations related to the root keys locked in KeyStore.
  */
+@Deprecated("The master keys can be imported into Android KeyStore directly.")
 object RootKey {
     private val sAndroidKeyStore by lazy {
         KeyStore.getInstance("AndroidKeyStore")
@@ -29,6 +30,9 @@ object RootKey {
 
                 setUserAuthenticationRequired(true)
                 setUserAuthenticationValidityDurationSeconds(-1)
+                if (Build.VERSION.SDK_INT >= 28) {
+                    setIsStrongBoxBacked(true)
+                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     setInvalidatedByBiometricEnrollment(false)
                 }
