@@ -2,9 +2,11 @@ package com.gh0u1l5.tenseconds.backend.api
 
 import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.bean.Identity
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 @Suppress("MemberVisibilityCanBePrivate")
 object Store {
@@ -18,48 +20,30 @@ object Store {
             return instance.collection("identities/${user.uid}/")
         }
 
-        fun fetchAll(success: (Map<String, Identity>) -> Unit) {
-            fetchAll(success) { /* Ignore */ }
+        fun fetch(identityId: String): Task<Identity>? {
+            return takeCollection()?.document(identityId)?.get()?.continueWith { task ->
+                task.result.toObject(Identity::class.java)
+            }
         }
 
-        fun fetchAll(success: (Map<String, Identity>) -> Unit, failed: (Exception) -> Unit) {
-            takeCollection()?.get()
-                    ?.addOnSuccessListener { result ->
-                        success(result.associate { identity ->
-                            identity.id to identity.toObject(Identity::class.java)
-                        })
-                    }
-                    ?.addOnFailureListener(failed)
+        fun fetchAll(): Task<Map<String, Identity>>? {
+            return takeCollection()?.get()?.continueWith { task ->
+                task.result.associate { identity ->
+                    identity.id to identity.toObject(Identity::class.java)
+                }
+            }
         }
 
-        fun add(identity: Identity, success: (DocumentReference) -> Unit) {
-            add(identity, success) { /* Ignore */ }
+        fun add(identity: Identity): Task<DocumentReference>? {
+            return takeCollection()?.add(identity)
         }
 
-        fun add(identity: Identity, success: (DocumentReference) -> Unit, failed: (Exception) -> Unit) {
-            takeCollection()?.add(identity)
-                    ?.addOnSuccessListener(success)
-                    ?.addOnFailureListener(failed)
+        fun update(identityId: String, data: Map<String, Any>): Task<Void>? {
+            return takeCollection()?.document(identityId)?.set(data, SetOptions.merge())
         }
 
-        fun update(identityId: String, data: Map<String, Any>, success: (Void) -> Unit) {
-            update(identityId, data, success) { /* Ignore */ }
-        }
-
-        fun update(identityId: String, data: Map<String, Any>, success: (Void) -> Unit, failed: (Exception) -> Unit) {
-            takeCollection()?.document(identityId)?.update(data)
-                    ?.addOnSuccessListener(success)
-                    ?.addOnFailureListener(failed)
-        }
-
-        fun delete(identityId: String, success: (Void) -> Unit) {
-            delete(identityId, success) { /* Ignore */ }
-        }
-
-        fun delete(identityId: String, success: (Void) -> Unit, failed: (Exception) -> Unit) {
-            takeCollection()?.document(identityId)?.delete()
-                    ?.addOnSuccessListener(success)
-                    ?.addOnFailureListener(failed)
+        fun delete(identityId: String): Task<Void>? {
+            return takeCollection()?.document(identityId)?.delete()
         }
     }
 
@@ -69,48 +53,30 @@ object Store {
             return instance.collection("accounts/${user.uid}/$identityId/")
         }
 
-        fun fetchAll(identityId: String, success: (Map<String, Account>) -> Unit) {
-            fetchAll(identityId, success) { /* Ignore */ }
+        fun fetch(identityId: String, accountId: String): Task<Account>? {
+            return takeCollection(identityId)?.document(accountId)?.get()?.continueWith { task ->
+                task.result.toObject(Account::class.java)
+            }
         }
 
-        fun fetchAll(identityId: String, success: (Map<String, Account>) -> Unit, failed: (Exception) -> Unit) {
-            takeCollection(identityId)?.get()
-                    ?.addOnSuccessListener { result ->
-                        success(result.associate { account ->
-                            account.id to account.toObject(Account::class.java)
-                        })
-                    }
-                    ?.addOnFailureListener(failed)
+        fun fetchAll(identityId: String): Task<Map<String, Account>>? {
+            return takeCollection(identityId)?.get()?.continueWith { task ->
+                task.result.associate { account ->
+                    account.id to account.toObject(Account::class.java)
+                }
+            }
         }
 
-        fun add(identityId: String, account: Account, success: (DocumentReference) -> Unit) {
-            add(identityId, account, success) { /* Ignore */ }
+        fun add(identityId: String, account: Account): Task<DocumentReference>? {
+            return takeCollection(identityId)?.add(account)
         }
 
-        fun add(identityId: String, account: Account, success: (DocumentReference) -> Unit, failed: (Exception) -> Unit) {
-            takeCollection(identityId)?.add(account)
-                    ?.addOnSuccessListener(success)
-                    ?.addOnFailureListener(failed)
+        fun update(identityId: String, accountId: String, data: Map<String, Any>): Task<Void>? {
+            return takeCollection(identityId)?.document(accountId)?.set(data, SetOptions.merge())
         }
 
-        fun update(identityId: String, accountId: String, data: Map<String, Any>, success: (Void) -> Unit) {
-            update(identityId, accountId, data, success) { /* Ignore */ }
-        }
-
-        fun update(identityId: String, accountId: String, data: Map<String, Any>, success: (Void) -> Unit, failed: (Exception) -> Unit) {
-            takeCollection(identityId)?.document(accountId)?.update(data)
-                    ?.addOnSuccessListener(success)
-                    ?.addOnFailureListener(failed)
-        }
-
-        fun delete(identityId: String, accountId: String, success: (Void) -> Unit) {
-            delete(identityId, accountId, success) { /* Ignore */ }
-        }
-
-        fun delete(identityId: String, accountId: String, success: (Void) -> Unit, failed: (Exception) -> Unit) {
-            takeCollection(identityId)?.document(accountId)?.delete()
-                    ?.addOnSuccessListener(success)
-                    ?.addOnFailureListener(failed)
+        fun delete(identityId: String, accountId: String): Task<Void>? {
+            return takeCollection(identityId)?.document(accountId)?.delete()
         }
     }
 }
