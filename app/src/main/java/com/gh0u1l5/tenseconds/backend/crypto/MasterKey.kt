@@ -1,31 +1,42 @@
 package com.gh0u1l5.tenseconds.backend.crypto
 
-import android.content.Context
+import android.os.Build
+import android.security.keystore.KeyProperties
+import android.security.keystore.KeyProtection
 import com.gh0u1l5.tenseconds.backend.api.Store
+import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.deriveKeyWithPBKDF2
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.erase
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromHexStringToBytes
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.toSHA256
 import com.gh0u1l5.tenseconds.global.Constants.PBKDF2_ITERATIONS
-import com.gh0u1l5.tenseconds.global.Constants.PREF_NAME_MASTER_KEYS
-import com.gh0u1l5.tenseconds.global.TenSecondsApplication
+import java.security.KeyStore
 import javax.crypto.SecretKey
-import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
 /**
  * This object wraps all the cryptographic operations related to the master keys. A master key
- * is derived from a passphrase entered by the user, and will be encrypted using the root keys
- * locked in KeyStore before storing in the device storage.
+ * is derived from a passphrase entered by the user, and will be imported into Android KeyStore
+ * immediately.
  */
 object MasterKey {
-    /**
-     * A [SecretKeyFactory] which can derive a key from a passphrase using PBKDF2.
-     * @hide
-     */
-    private val sPBEKeyFactory by lazy {
-        SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+    private val sAndroidKeyStore by lazy {
+        KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+    }
+
+    private val sMasterKeyProtection by lazy {
+        KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT).run {
+            setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+
+            setUserAuthenticationRequired(true)
+            setUserAuthenticationValidityDurationSeconds(-1)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                setInvalidatedByBiometricEnrollment(false)
+            }
+
+            build()
+        }
     }
 
     /**
@@ -37,14 +48,14 @@ object MasterKey {
      * operation, this passphrase will be erased immediately.
      */
     private fun derive(identityId: String, passphrase: CharArray): SecretKey {
-        var buffer: ByteArray? = null
+        var keyBuffer: ByteArray? = null
         try {
             val salt = identityId.toByteArray()
             val spec = PBEKeySpec(passphrase, salt, PBKDF2_ITERATIONS, 32 * 8)
-            buffer = sPBEKeyFactory.generateSecret(spec).encoded
-            return SecretKeySpec(buffer, "AES")
+            keyBuffer = deriveKeyWithPBKDF2(spec)
+            return SecretKeySpec(keyBuffer, "AES")
         } finally {
-            buffer?.erase()
+            keyBuffer?.erase()
             passphrase.erase()
         }
     }
@@ -52,7 +63,7 @@ object MasterKey {
     /**
      * Updates the passphrase bounded to a specified identity. It will
      *   1. Generates an AES-256 master key based on the given passphrase.
-     *   2. Encrypts this key using the root key and stores the encrypted value locally.
+     *   2. Stores the master key to local Android Keystore.
      *   3. Stores the hash SHA256(identityId + SHA256(key)) to FireStore.
      *
      * @param identityId The ID of the identity which owns this master key.
@@ -63,14 +74,8 @@ object MasterKey {
         val key = derive(identityId, passphrase)
         try {
             // Update local storage
-            val iv = ByteArray(12)
-            val wrappedKey = RootKey.wrap(key, iv)
-            val context = TenSecondsApplication.instance
-            context.getSharedPreferences(PREF_NAME_MASTER_KEYS, Context.MODE_PRIVATE)
-                    .edit()
-                    .putString("${identityId}_iv", iv.fromBytesToHexString())
-                    .putString("${identityId}_key", wrappedKey.fromBytesToHexString())
-                    .apply()
+            val entry = KeyStore.SecretKeyEntry(key)
+            sAndroidKeyStore.setEntry("$identityId-master", entry, sMasterKeyProtection)
 
             // Update remote storage
             val hash = (identityId.toByteArray() + key.encoded.toSHA256()).toSHA256()
@@ -82,25 +87,14 @@ object MasterKey {
     }
 
     /**
-     * Retrieves the AES-256 master key of the specified identity. Remember, it is caller's
-     * responsibility to erase the [SecretKey] object.
+     * Retrieves the AES-256 master key of the specified identity from Android KeyStore.
      *
      * @param identityId The ID of the identity which owns this master key.
      */
     private fun retrieve(identityId: String): SecretKey? {
         // TODO: handle fingerprint
-
-        val context = TenSecondsApplication.instance
-        val masterKeys = context.getSharedPreferences(PREF_NAME_MASTER_KEYS, Context.MODE_PRIVATE)
-
-        val ivHex = masterKeys.getString("${identityId}_iv", null)
-        val wrappedKeyHex = masterKeys.getString("${identityId}_key", null)
-        if (ivHex == null || wrappedKeyHex == null) {
-            return null
-        }
-
-        val iv = ivHex.fromHexStringToBytes()
-        val wrappedKey = wrappedKeyHex.fromHexStringToBytes()
-        return RootKey.unwrap(wrappedKey, iv) as SecretKey
+        val entry = sAndroidKeyStore.getEntry("$identityId-master", null)
+        // TODO: should caller erase this secret key?
+        return (entry as? KeyStore.SecretKeyEntry)?.secretKey
     }
 }
