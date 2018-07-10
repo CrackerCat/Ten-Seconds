@@ -23,7 +23,7 @@ object Store {
     object IdentityCollection {
         private fun takeCollection(): CollectionReference? {
             val user = Auth.instance.currentUser ?: return null
-            return instance.collection("identities/${user.uid}/")
+            return instance.collection("users/${user.uid}/identities/")
         }
 
         private fun takeDocument(identityId: String): DocumentReference? {
@@ -70,7 +70,7 @@ object Store {
     object AccountCollection {
         private fun takeCollection(identityId: String): CollectionReference? {
             val user = Auth.instance.currentUser ?: return null
-            return instance.collection("accounts/${user.uid}/$identityId/")
+            return instance.collection("users/${user.uid}/identities/$identityId/accounts/")
         }
 
         private fun takeDocument(identityId: String, accountId: String): DocumentReference? {
