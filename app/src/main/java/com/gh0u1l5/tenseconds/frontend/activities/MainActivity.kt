@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -13,6 +12,10 @@ import android.view.MenuItem
 import android.widget.TextView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
+import com.gh0u1l5.tenseconds.backend.api.Store
+import com.gh0u1l5.tenseconds.backend.bean.Identity
+import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
+import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -25,9 +28,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        fab.setOnClickListener { _ ->
+            if (!BiometricUtils.isHardwareAvailable()) {
+                // TODO: handle this situation gracefully
+                return@setOnClickListener
+            }
+            if (!BiometricUtils.hasEnrolledFingerprints()) {
+                // TODO: handle this situation gracefully
+                return@setOnClickListener
+            }
+            Store.IdentityCollection.add(Identity("Emerson", ""))
+                    ?.addOnSuccessListener {
+                        MasterKey.update(it.id, "passphrase".toCharArray())
+                    }
         }
 
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar,
