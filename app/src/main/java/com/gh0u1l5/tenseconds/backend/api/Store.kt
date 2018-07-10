@@ -4,11 +4,7 @@ import com.gh0u1l5.tenseconds.backend.api.TaskDecorators.withFailureLog
 import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.bean.Identity
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.*
 
 @Suppress("MemberVisibilityCanBePrivate")
 object Store {
