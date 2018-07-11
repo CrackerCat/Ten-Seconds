@@ -5,8 +5,8 @@ import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.deriveKeyWithPBKDF2
+import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.digestWithSHA256
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.toSHA256
 import com.gh0u1l5.tenseconds.backend.crypto.EraseUtils.erase
 import com.gh0u1l5.tenseconds.global.Constants.PBKDF2_ITERATIONS
 import java.security.KeyStore
@@ -61,6 +61,16 @@ object MasterKey {
     }
 
     /**
+     * Calculate the salted hash of a master key as SHA256(identityId + rawKey).
+     *
+     * @param identityId The identityId bounded to this master key
+     * @param rawKey The raw master key stored in a ByteArray
+     */
+    private fun hash(identityId: String, rawKey: ByteArray): ByteArray {
+        return digestWithSHA256(identityId.toByteArray(), rawKey)
+    }
+
+    /**
      * Updates the passphrase bounded to a specified identity. It will
      *   1. Generates an AES-256 master key based on the given passphrase.
      *   2. Stores the master key to local Android Keystore.
@@ -76,10 +86,8 @@ object MasterKey {
             // Update local storage
             val entry = KeyStore.SecretKeyEntry(key)
             sAndroidKeyStore.setEntry("$identityId-master", entry, sMasterKeyProtection)
-
             // Update remote storage
-            val hash = (identityId.toByteArray() + key.encoded.toSHA256()).toSHA256()
-            val data = mapOf("master" to hash.fromBytesToHexString())
+            val data = mapOf("master" to hash(identityId, key.encoded).fromBytesToHexString())
             Store.IdentityCollection.update(identityId, data)
         } finally {
             (key as SecretKeySpec).erase()

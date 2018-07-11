@@ -27,12 +27,26 @@ object CryptoUtils {
         }
     }
 
+    /**
+     * A [MessageDigest] object which can generate SHA-256 digests safely.
+     * @hide
+     */
+    private val sSHA256MessageDigest by lazy {
+        MessageDigest.getInstance("SHA-256")
+    }
 
     /**
      * Calculates the SHA256 hash of a ByteArray
      */
-    fun ByteArray.toSHA256(): ByteArray {
-        return MessageDigest.getInstance("SHA-256").digest(this)
+    fun digestWithSHA256(vararg arrays: ByteArray): ByteArray {
+        try {
+            arrays.forEach { array ->
+                sSHA256MessageDigest.update(array)
+            }
+            return sSHA256MessageDigest.digest()
+        } finally {
+            sSHA256MessageDigest.reset()
+        }
     }
 
     /**
