@@ -4,13 +4,16 @@ import android.os.Build
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
 import com.gh0u1l5.tenseconds.backend.api.Store
+import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.deriveKeyWithPBKDF2
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.digestWithSHA256
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
 import com.gh0u1l5.tenseconds.backend.crypto.EraseUtils.erase
 import com.gh0u1l5.tenseconds.global.Constants.PBKDF2_ITERATIONS
 import java.security.KeyStore
+import javax.crypto.Cipher
 import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
@@ -26,8 +29,9 @@ object MasterKey {
 
     private val sMasterKeyProtection by lazy {
         KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT).run {
-            setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+            setRandomizedEncryptionRequired(false)
+            setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
 
             setUserAuthenticationRequired(true)
             setUserAuthenticationValidityDurationSeconds(-1)
@@ -42,12 +46,13 @@ object MasterKey {
     /**
      * Derives an AES-256 master key from a passphrase using PBKDF2.
      *
-     * @param identityId The ID of the identity which owns this master key. This ID will be used as
-     * salt value in PBKDF2.
+     * @param identityId The identityId bounded to this master key, which will be used as the salt
+     * value in PBKDF2.
      * @param passphrase The passphrase used to derive the AES-256 key. Notice that after this
      * operation, this passphrase will be erased immediately.
      */
     private fun derive(identityId: String, passphrase: CharArray): SecretKey {
+        // TODO: change PBKDF2 to scrypt as soon as possible
         var keyBuffer: ByteArray? = null
         try {
             val salt = identityId.toByteArray()
@@ -76,7 +81,7 @@ object MasterKey {
      *   2. Stores the master key to local Android Keystore.
      *   3. Stores the hash SHA256(identityId + SHA256(key)) to FireStore.
      *
-     * @param identityId The ID of the identity which owns this master key.
+     * @param identityId The identityId bounded to this master key
      * @param passphrase The passphrase used to derive the AES-256 key. Notice that after this
      * operation, this passphrase will be erased immediately.
      */
@@ -95,15 +100,57 @@ object MasterKey {
     }
 
     /**
-     * Retrieves the AES-256 master key of the specified identity from Android KeyStore.
+     * Verifies that the given passphrase matches the stored hash.
      *
-     * @param identityId The ID of the identity which owns this master key.
+     * @param identityId TThe identityId bounded to this master key
+     * @param passphrase The passphrase used to derive the AES-256 key. Notice that after this
+     * operation, this passphrase will be erased immediately.
+     * @param success The success callback
+     */
+    fun verify(identityId: String, passphrase: CharArray, success: () -> Unit) {
+        val key = derive(identityId, passphrase)
+        try {
+            val hash = hash(identityId, key.encoded).fromBytesToHexString()
+            Store.IdentityCollection.fetch(identityId)?.addOnSuccessListener {
+                if (it.master == hash) {
+                    success()
+                }
+            }
+        } finally {
+            (key as SecretKeySpec).erase()
+        }
+    }
+
+    /**
+     * Retrieves the AES-256 master key of the specified identity backed by Android KeyStore.
+     *
+     * @param identityId The identityId bounded to this master key
      */
     private fun retrieve(identityId: String): SecretKey? {
-        // TODO: handle fingerprint
         val entry = sAndroidKeyStore.getEntry("$identityId-master", null)
-        // TODO: should caller erase this secret key?
         return (entry as? KeyStore.SecretKeyEntry)?.secretKey
+    }
+
+    /**
+     * Generates the password for the given account.
+     *
+     * @param identityId The identityId that owns this account
+     * @param accountId The accountId bounded to this account
+     * @param account The basic account information
+     * @param success The success callback
+     */
+    fun generate(identityId: String, accountId: String, account: Account, success: (ByteArray) -> Unit) {
+        val key = retrieve(identityId) ?: throw IllegalStateException("invalid master key")
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding").apply {
+            init(Cipher.ENCRYPT_MODE, key, IvParameterSpec(ByteArray(16) {
+                if (it < accountId.length) accountId[it].toByte() else it.toByte()
+            }))
+        }
+        BiometricUtils.authenticate(cipher) {
+            // TODO: process the PasswordSpec
+            val result = it.doFinal("${account.username}@${account.domain}".toByteArray())
+            try { success(result) } finally { result.erase() }
+        }
     }
 
     /**
