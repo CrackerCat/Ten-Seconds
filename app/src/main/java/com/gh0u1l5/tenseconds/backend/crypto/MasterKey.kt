@@ -6,6 +6,7 @@ import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Account
+import com.gh0u1l5.tenseconds.backend.crypto.CryptoObjects.sAndroidKeyStore
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.deriveKeyWithPBKDF2
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.digestWithSHA256
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
@@ -25,10 +26,6 @@ import javax.crypto.spec.SecretKeySpec
  * immediately.
  */
 object MasterKey {
-    private val sAndroidKeyStore by lazy {
-        KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
-    }
-
     private val sMasterKeyProtection by lazy {
         KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT).run {
             setRandomizedEncryptionRequired(false)
