@@ -71,8 +71,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val header = nav_view.getHeaderView(0)
         if (user.email != null) {
-            header.findViewById<TextView>(R.id.user_nickname).text = user.email?.substringBefore('@')
+            val username = user.email?.substringBefore('@')?.capitalize()
+            header.findViewById<TextView>(R.id.user_nickname).text = username
             header.findViewById<TextView>(R.id.user_email).text = user.email
+        } else {
+            val username = if (user.displayName.isNullOrEmpty()) "Unknown" else user.displayName
+            header.findViewById<TextView>(R.id.user_nickname).text = username
+            header.findViewById<TextView>(R.id.user_email).text = "unknown@somewhere.com"
         }
     }
 
