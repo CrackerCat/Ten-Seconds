@@ -10,6 +10,7 @@ import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.deriveKeyWithPBKDF2
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.digestWithSHA256
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
 import com.gh0u1l5.tenseconds.backend.crypto.EraseUtils.erase
+import com.gh0u1l5.tenseconds.global.CharType.fromCharTypesToCharArray
 import com.gh0u1l5.tenseconds.global.Constants.PBKDF2_ITERATIONS
 import java.security.KeyStore
 import javax.crypto.Cipher
@@ -140,18 +141,39 @@ object MasterKey {
      * @param account The basic account information
      * @param success The success callback
      */
-    fun generate(context: Context, identityId: String, accountId: String, account: Account, success: (ByteArray) -> Unit) {
+    fun generate(context: Context, identityId: String, accountId: String, account: Account, success: (CharArray) -> Unit) {
         val key = retrieve(identityId) ?: throw IllegalStateException("invalid master key")
         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding").apply {
             init(Cipher.ENCRYPT_MODE, key, IvParameterSpec(ByteArray(16) {
                 if (it < accountId.length) accountId[it].toByte() else it.toByte()
             }))
         }
-        BiometricUtils.authenticate(context, cipher) {
-            // TODO: process the PasswordSpec
-            val result = it.doFinal("${account.username}@${account.domain}".toByteArray())
-            try { success(result) } finally { result.erase() }
-        }
+        BiometricUtils.authenticate(context, cipher, object : BiometricUtils.AuthenticationCallback {
+            override fun onSuccess(cipher: Cipher) {
+                val source = "${account.username}@${account.domain}".toByteArray()
+                val buffer = cipher.doFinal(source)
+                val password = CharArray(account.specification.length)
+                try {
+                    val chars = account.specification.types.fromCharTypesToCharArray()
+                    success(password.apply {
+                        for (i in 0 until size) {
+                            this[i] = chars[buffer[i % buffer.size] % chars.size]
+                        }
+                    })
+                } finally {
+                    buffer.erase()
+                    password.erase()
+                }
+            }
+
+            override fun onNoBiometrics(context: Context, errString: CharSequence?) {
+                // TODO: handle this situation gracefully
+            }
+
+            override fun onHardwareNotPresent(context: Context, errString: CharSequence?) {
+                // TODO: handle this situation gracefully
+            }
+        })
     }
 
     /**

@@ -14,8 +14,6 @@ import android.widget.TextView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.backend.api.Store
-import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -30,14 +28,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { _ ->
-            if (!BiometricUtils.isHardwareAvailable()) {
-                // TODO: handle this situation gracefully
-                return@setOnClickListener
-            }
-            if (!BiometricUtils.hasEnrolledFingerprints()) {
-                // TODO: handle this situation gracefully
-                return@setOnClickListener
-            }
             val identityId = "c1ioJTPT5WhntKiG5525"
             val accountId = "U4s2opFNK4NvXWtbKtdW"
             Store.IdentityCollection.fetch(identityId)
@@ -46,7 +36,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         Store.AccountCollection.fetch(identityId, accountId)
                                 ?.addOnSuccessListener { account ->
                                     MasterKey.generate(this, identityId, accountId, account) {
-                                        Log.w("RESULT", it.fromBytesToHexString())
+                                        Log.w("RESULT", it.toString())
                                     }
                                 }
                     }
