@@ -8,13 +8,14 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.backend.api.Store
-import com.gh0u1l5.tenseconds.backend.bean.Identity
 import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
+import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -37,9 +38,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // TODO: handle this situation gracefully
                 return@setOnClickListener
             }
-            Store.IdentityCollection.add(Identity("Emerson", ""))
-                    ?.addOnSuccessListener {
-                        MasterKey.update(it.id, "passphrase".toCharArray())
+            val identityId = "c1ioJTPT5WhntKiG5525"
+            val accountId = "U4s2opFNK4NvXWtbKtdW"
+            Store.IdentityCollection.fetch(identityId)
+                    ?.addOnSuccessListener { _ ->
+                        MasterKey.update(identityId, "passphrase".toCharArray())
+                        Store.AccountCollection.fetch(identityId, accountId)
+                                ?.addOnSuccessListener { account ->
+                                    MasterKey.generate(identityId, accountId, account) {
+                                        Log.w("RESULT", it.fromBytesToHexString())
+                                    }
+                                }
                     }
         }
 
