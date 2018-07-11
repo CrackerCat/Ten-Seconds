@@ -156,7 +156,8 @@ object MasterKey {
                     val chars = account.specification.types.fromCharTypesToCharArray()
                     success(password.apply {
                         for (i in 0 until size) {
-                            this[i] = chars[buffer[i % buffer.size] % chars.size]
+                            val value = buffer[i % buffer.size].toInt() and 0xFF
+                            this[i] = chars[value % chars.size]
                         }
                     })
                 } finally {
