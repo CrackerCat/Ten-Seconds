@@ -88,6 +88,7 @@ object MasterKey {
         val key = derive(identityId, passphrase)
         try {
             // Update local storage
+            // TODO: catch error caused by no fingerprints
             val entry = KeyStore.SecretKeyEntry(key)
             sAndroidKeyStore.setEntry("$identityId-master", entry, sMasterKeyProtection)
             // Update remote storage
@@ -131,14 +132,15 @@ object MasterKey {
     }
 
     /**
-     * Generates the password for the given account.
+     * Uses the master key to generate a password for the given account.
      *
+     * @param context The context for current operation
      * @param identityId The identityId that owns this account
      * @param accountId The accountId bounded to this account
      * @param account The basic account information
-     * @param success The success callback
+     * @param success The success callback, which will receive the generated password
      */
-    fun generate(context: Context, identityId: String, accountId: String, account: Account, success: (CharArray) -> Unit) {
+    fun access(context: Context, identityId: String, accountId: String, account: Account, success: (CharArray) -> Unit) {
         val key = retrieve(identityId) ?: throw IllegalStateException("invalid master key")
         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding").apply {
             init(Cipher.ENCRYPT_MODE, key, IvParameterSpec(ByteArray(16) {
@@ -147,7 +149,7 @@ object MasterKey {
         }
         BiometricUtils.authenticate(context, cipher, object : BiometricUtils.AuthenticationCallback {
             override fun onSuccess(cipher: Cipher) {
-                val source = "${account.username}@${account.domain}".toByteArray()
+                val source = "$accountId#${account.username}@${account.domain}".toByteArray()
                 val buffer = cipher.doFinal(source)
                 val password = CharArray(account.specification.length)
                 try {
