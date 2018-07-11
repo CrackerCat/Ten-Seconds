@@ -29,10 +29,6 @@
             android:name="com.gh0u1l5.tenseconds.frontend.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="com.gh0u1l5.tenseconds.frontend.activity.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

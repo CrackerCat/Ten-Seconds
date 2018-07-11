@@ -88,9 +88,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_settings -> mainHandler.postDelayed({
-                startActivity(Intent(this, SettingsActivity::class.java))
-            }, 300L)
             R.id.nav_exit -> mainHandler.postDelayed({
                 Auth.instance.signOut()
                 startActivity(Intent(this, LoginActivity::class.java))
