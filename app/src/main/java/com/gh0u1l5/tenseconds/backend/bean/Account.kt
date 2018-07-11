@@ -8,9 +8,7 @@ package com.gh0u1l5.tenseconds.backend.bean
  * @property specification The specification used for generating a password
  */
 data class Account (
-        var username: String,
-        var domain: String,
-        var specification: PasswordSpec
-) {
-    constructor() : this("", "", PasswordSpec())
-}
+        var username: String = "",
+        var domain: String = "",
+        var specification: PasswordSpec = PasswordSpec()
+)
