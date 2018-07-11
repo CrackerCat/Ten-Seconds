@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.gh0u1l5.tenseconds.frontend.activities.MainActivity"
+            android:name="com.gh0u1l5.tenseconds.frontend.activity.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
@@ -26,11 +26,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gh0u1l5.tenseconds.frontend.activities.LoginActivity"
+            android:name="com.gh0u1l5.tenseconds.frontend.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.gh0u1l5.tenseconds.frontend.activities.SettingsActivity"
+            android:name="com.gh0u1l5.tenseconds.frontend.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme" />
     </application>

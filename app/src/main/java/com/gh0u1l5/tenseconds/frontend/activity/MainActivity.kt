@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.frontend.activities
+package com.gh0u1l5.tenseconds.frontend.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { _ ->
-            val identityId = "c1ioJTPT5WhntKiG5525"
-            val accountId = "U4s2opFNK4NvXWtbKtdW"
+            val identityId = "iwEgyOOS74iX3mS3U90V"
+            val accountId = "aU1PTgw4kf05DtHFo4W9"
             Store.IdentityCollection.fetch(identityId)
                     ?.addOnSuccessListener { _ ->
                         MasterKey.update(identityId, "passphrase".toCharArray())
