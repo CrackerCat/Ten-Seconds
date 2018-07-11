@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         MasterKey.update(identityId, "passphrase".toCharArray())
                         Store.AccountCollection.fetch(identityId, accountId)
                                 ?.addOnSuccessListener { account ->
-                                    MasterKey.generate(identityId, accountId, account) {
+                                    MasterKey.generate(this, identityId, accountId, account) {
                                         Log.w("RESULT", it.fromBytesToHexString())
                                     }
                                 }

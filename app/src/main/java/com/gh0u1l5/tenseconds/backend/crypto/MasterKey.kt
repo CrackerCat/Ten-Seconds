@@ -1,5 +1,6 @@
 package com.gh0u1l5.tenseconds.backend.crypto
 
+import android.content.Context
 import android.os.Build
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
@@ -139,14 +140,14 @@ object MasterKey {
      * @param account The basic account information
      * @param success The success callback
      */
-    fun generate(identityId: String, accountId: String, account: Account, success: (ByteArray) -> Unit) {
+    fun generate(context: Context, identityId: String, accountId: String, account: Account, success: (ByteArray) -> Unit) {
         val key = retrieve(identityId) ?: throw IllegalStateException("invalid master key")
         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding").apply {
             init(Cipher.ENCRYPT_MODE, key, IvParameterSpec(ByteArray(16) {
                 if (it < accountId.length) accountId[it].toByte() else it.toByte()
             }))
         }
-        BiometricUtils.authenticate(cipher) {
+        BiometricUtils.authenticate(context, cipher) {
             // TODO: process the PasswordSpec
             val result = it.doFinal("${account.username}@${account.domain}".toByteArray())
             try { success(result) } finally { result.erase() }
