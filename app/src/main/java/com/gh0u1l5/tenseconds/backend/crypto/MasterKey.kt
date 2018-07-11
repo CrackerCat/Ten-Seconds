@@ -97,4 +97,11 @@ object MasterKey {
         // TODO: should caller erase this secret key?
         return (entry as? KeyStore.SecretKeyEntry)?.secretKey
     }
+
+    /**
+     * Deletes the master key bounded by the given identityId locally.
+     */
+    fun delete(identityId: String) {
+        sAndroidKeyStore.deleteEntry(identityId)
+    }
 }

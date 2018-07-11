@@ -3,6 +3,7 @@ package com.gh0u1l5.tenseconds.backend.api
 import com.gh0u1l5.tenseconds.backend.api.TaskDecorators.withFailureLog
 import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.bean.Identity
+import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 
@@ -57,6 +58,7 @@ object Store {
         }
 
         fun delete(identityId: String): Task<Void>? {
+            MasterKey.delete(identityId)
             return takeDocument(identityId)
                     ?.delete()
                     ?.withFailureLog("FireStore")
