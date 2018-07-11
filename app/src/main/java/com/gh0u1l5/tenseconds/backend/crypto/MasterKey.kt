@@ -162,14 +162,6 @@ object MasterKey {
                     password.erase()
                 }
             }
-
-            override fun onNoBiometrics(context: Context, errString: CharSequence?) {
-                // TODO: handle this situation gracefully
-            }
-
-            override fun onHardwareNotPresent(context: Context, errString: CharSequence?) {
-                // TODO: handle this situation gracefully
-            }
         })
     }
 

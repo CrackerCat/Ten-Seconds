@@ -16,11 +16,20 @@ import com.gh0u1l5.tenseconds.R
 import javax.crypto.Cipher
 
 object BiometricUtils {
-    interface AuthenticationCallback {
-        // TODO: handle more results in future
-        fun onSuccess(cipher: Cipher)
-        fun onNoBiometrics(context: Context, errString: CharSequence?)
-        fun onHardwareNotPresent(context: Context, errString: CharSequence?)
+    interface AuthenticationCallback { // TODO: handle more results in future
+        fun onSuccess(cipher: Cipher) {
+            /* Ignore */
+        }
+
+        fun onNoBiometrics(context: Context, errString: CharSequence?) {
+            // TODO: handle this situation gracefully
+            Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
+        }
+
+        fun onHardwareNotPresent(context: Context, errString: CharSequence?) {
+            // TODO: handle this situation gracefully
+            Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
+        }
     }
 
     fun authenticate(context: Context, cipher: Cipher, callback: AuthenticationCallback) {
