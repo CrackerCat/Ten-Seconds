@@ -13,6 +13,8 @@ import com.gh0u1l5.tenseconds.global.CharType.UPPER_LETTERS
  * [SYMBOLS], [LOWER_LETTERS] or [UPPER_LETTERS].
  */
 data class PasswordSpec (
-        val length: Int,
-        val types: Int
-)
+        var length: Int,
+        var types: Int
+) {
+    constructor() : this(0, 0)
+}

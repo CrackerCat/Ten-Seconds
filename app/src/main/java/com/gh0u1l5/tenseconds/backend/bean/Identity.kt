@@ -7,6 +7,8 @@ package com.gh0u1l5.tenseconds.backend.bean
  * @property master The hash of the combination of uid and master password.
  */
 data class Identity (
-        val nickname: String,
-        val master: String
-)
+        var nickname: String,
+        var master: String
+) {
+    constructor() : this("", "")
+}
