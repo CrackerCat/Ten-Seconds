@@ -14,6 +14,7 @@ import android.widget.TextView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.backend.api.Store
+import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -28,6 +29,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { _ ->
+            if (!BiometricUtils.hasValidBiometrics()) {
+                // TODO: handle this situation gracefully
+                Log.w("TEST", "NO FINGERPRINT")
+                return@setOnClickListener
+            }
             val identityId = "iwEgyOOS74iX3mS3U90V"
             val accountId = "aU1PTgw4kf05DtHFo4W9"
             Store.IdentityCollection.fetch(identityId)

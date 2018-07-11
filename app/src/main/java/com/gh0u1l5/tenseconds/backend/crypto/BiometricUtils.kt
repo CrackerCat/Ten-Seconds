@@ -10,10 +10,16 @@ import android.hardware.fingerprint.FingerprintManager
 import android.os.AsyncTask
 import android.os.Build
 import android.os.CancellationSignal
+import android.security.keystore.KeyProperties
+import android.security.keystore.KeyProtection
 import android.support.annotation.RequiresApi
 import android.widget.Toast
 import com.gh0u1l5.tenseconds.R
+import com.gh0u1l5.tenseconds.backend.crypto.CryptoObjects.sAndroidKeyStore
+import java.security.KeyStore
+import java.security.KeyStoreException
 import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 
 object BiometricUtils {
     interface AuthenticationCallback { // TODO: handle more results in future
@@ -30,6 +36,28 @@ object BiometricUtils {
             // TODO: handle this situation gracefully
             Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
         }
+    }
+
+    private val sVerifyBiometricsKeyProtection by lazy {
+        KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT).run {
+            setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+            setUserAuthenticationRequired(true)
+            setUserAuthenticationValidityDurationSeconds(-1)
+            build()
+        }
+    }
+
+    fun hasValidBiometrics(): Boolean {
+        val key = ByteArray(32) { 0 }
+        val entry = KeyStore.SecretKeyEntry(SecretKeySpec(key, "AES"))
+        try {
+            sAndroidKeyStore.setEntry("garbage", entry, sVerifyBiometricsKeyProtection)
+            sAndroidKeyStore.deleteEntry("garbage")
+        } catch (_: KeyStoreException) {
+            return false
+        }
+        return true
     }
 
     fun authenticate(context: Context, cipher: Cipher, callback: AuthenticationCallback) {
