@@ -37,12 +37,13 @@ object BiometricUtils {
 
     fun authenticate(cipher: Cipher, success: (Cipher) -> Unit) {
         if (Build.VERSION.SDK_INT >= 28) {
-            val title = context.getString(R.string.biometric_prompt_title)
             val cancel = context.getString(R.string.button_cancel)
             val crypto = BiometricPrompt.CryptoObject(cipher)
             val executor = AsyncTask.THREAD_POOL_EXECUTOR
             BiometricPrompt.Builder(context)
-                    .setTitle(title)
+                    .setTitle(context.getString(R.string.biometric_prompt_title))
+                    .setSubtitle(context.getString(R.string.biometric_prompt_subtitle))
+                    .setDescription(context.getString(R.string.biometric_prompt_description))
                     .setNegativeButton(cancel, executor, DialogInterface.OnClickListener { dialog, _ ->
                         dialog.dismiss()
                     })
