@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab.setOnClickListener { _ ->
             if (!BiometricUtils.hasValidBiometrics()) {
                 // TODO: handle this situation gracefully
-                Log.w("TEST", "NO FINGERPRINT")
                 return@setOnClickListener
             }
             val identityId = "iwEgyOOS74iX3mS3U90V"
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         Store.AccountCollection.fetch(identityId, accountId)
                                 ?.addOnSuccessListener { account ->
                                     MasterKey.access(this, identityId, accountId, account) {
-                                        Log.w("RESULT", it.toString())
+                                        Log.w("RESULT", it.joinToString(""))
                                     }
                                 }
                     }

@@ -3,6 +3,7 @@
 
     <string name="title_activity_main">10 Seconds</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="description_service_locker">The locker service provided by 10s for pasting the passwords securely.</string>
 
     <string name="biometric_prompt_title">Fingerprint Required</string>
     <string name="biometric_prompt_subtitle">Grant access to your master key</string>
