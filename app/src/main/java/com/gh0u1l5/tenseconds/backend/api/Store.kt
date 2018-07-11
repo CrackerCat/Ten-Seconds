@@ -30,19 +30,19 @@ object Store {
         fun fetch(identityId: String): Task<Identity>? {
             return takeDocument(identityId)
                     ?.get()
+                    ?.continueWith { it.result.toObject(Identity::class.java)!! }
                     ?.withFailureLog("FireStore")
-                    ?.continueWith { it.result.toObject(Identity::class.java) }
         }
 
         fun fetchAll(): Task<Map<String, Identity>>? {
             return takeCollection()
                     ?.get()
-                    ?.withFailureLog("FireStore")
                     ?.continueWith { task ->
                         task.result.associate { identity ->
                             identity.id to identity.toObject(Identity::class.java)
                         }
                     }
+                    ?.withFailureLog("FireStore")
         }
 
         fun add(identity: Identity): Task<DocumentReference>? {
@@ -78,19 +78,19 @@ object Store {
         fun fetch(identityId: String, accountId: String): Task<Account>? {
             return takeDocument(identityId, accountId)
                     ?.get()
+                    ?.continueWith { it.result.toObject(Account::class.java)!! }
                     ?.withFailureLog("FireStore")
-                    ?.continueWith { it.result.toObject(Account::class.java) }
         }
 
         fun fetchAll(identityId: String): Task<Map<String, Account>>? {
             return takeCollection(identityId)
                     ?.get()
-                    ?.withFailureLog("FireStore")
                     ?.continueWith { task ->
                         task.result.associate { account ->
                             account.id to account.toObject(Account::class.java)
                         }
                     }
+                    ?.withFailureLog("FireStore")
         }
 
         fun add(identityId: String, account: Account): Task<DocumentReference>? {
