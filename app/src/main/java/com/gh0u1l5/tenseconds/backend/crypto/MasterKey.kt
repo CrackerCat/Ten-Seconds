@@ -5,9 +5,9 @@ import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.deriveKeyWithPBKDF2
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.erase
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.toSHA256
+import com.gh0u1l5.tenseconds.backend.crypto.EraseUtils.erase
 import com.gh0u1l5.tenseconds.global.Constants.PBKDF2_ITERATIONS
 import java.security.KeyStore
 import javax.crypto.SecretKey
