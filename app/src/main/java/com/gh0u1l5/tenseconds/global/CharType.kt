@@ -15,8 +15,8 @@ object CharType {
     private val sUpperLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()
 
     fun Int.fromCharTypesToCharArray(): CharArray =
-            if (this and NUMBERS != 0) sNumbers else charArrayOf() +
-            if (this and SYMBOLS != 0) sSymbols else charArrayOf() +
-            if (this and LOWER_LETTERS != 0) sLowerLetters else charArrayOf() +
-            if (this and UPPER_LETTERS != 0) sUpperLetters else charArrayOf()
+            (if (this and NUMBERS != 0) sNumbers else charArrayOf()) +
+            (if (this and SYMBOLS != 0) sSymbols else charArrayOf()) +
+            (if (this and LOWER_LETTERS != 0) sLowerLetters else charArrayOf()) +
+            (if (this and UPPER_LETTERS != 0) sUpperLetters else charArrayOf())
 }
