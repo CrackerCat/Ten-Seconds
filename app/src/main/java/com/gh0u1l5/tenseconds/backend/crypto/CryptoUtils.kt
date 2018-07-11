@@ -1,5 +1,6 @@
 package com.gh0u1l5.tenseconds.backend.crypto
 
+import android.widget.EditText
 import java.security.MessageDigest
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
@@ -46,6 +47,12 @@ object CryptoUtils {
             return sSHA256MessageDigest.digest()
         } finally {
             sSHA256MessageDigest.reset()
+        }
+    }
+
+    fun EditText.getPassword(): CharArray {
+        return CharArray(text.length).also {
+            text.getChars(0, text.length, it, 0)
         }
     }
 
