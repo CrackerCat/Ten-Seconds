@@ -6,6 +6,9 @@ object CharType {
     const val LOWER_LETTERS: Int = 0x00000004
     const val UPPER_LETTERS: Int = 0x00000008
 
+    const val LETTERS = LOWER_LETTERS or UPPER_LETTERS
+    const val ALL = NUMBERS or SYMBOLS or LETTERS
+
     private val sNumbers = "1234567890".toCharArray()
     private val sSymbols = "!?@#\$%^&*()[]{}<>~`:;,./\\\"'+_=-".toCharArray()
     private val sLowerLetters = "abcdefghijklmnopqrstuvwxyz".toCharArray()
