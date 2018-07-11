@@ -5,11 +5,10 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import java.security.Key
 import java.security.KeyStore
-import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
-import javax.crypto.spec.GCMParameterSpec
+import javax.crypto.spec.IvParameterSpec
 
 /**
  * This object wraps all the cryptographic operations related to the root keys locked in KeyStore.
@@ -25,8 +24,8 @@ object RootKey {
             val purpose = KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
             init(KeyGenParameterSpec.Builder("root", purpose).run {
                 setKeySize(256)
-                setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
 
                 setUserAuthenticationRequired(true)
                 setUserAuthenticationValidityDurationSeconds(-1)
@@ -63,26 +62,24 @@ object RootKey {
      * Wraps a secret key using root key with AES-GCM algorithm.
      *
      * @param key The secret key to be wrapped.
-     * @param iv A 12 byte buffer used to store the random-generated IV.
      */
-    fun wrap(key: Key, iv: ByteArray): ByteArray {
-        SecureRandom().nextBytes(iv)
-        return Cipher.getInstance("AES/GCM/NoPadding").run {
-            init(Cipher.WRAP_MODE, retrieve(), GCMParameterSpec(96, iv))
-            wrap(key)
+    fun wrap(key: Key): Pair<ByteArray, ByteArray> {
+        return Cipher.getInstance("AES/CBC/PKCS7Padding").run {
+            init(Cipher.WRAP_MODE, retrieve())
+            iv to wrap(key)
         }
     }
 
     /**
      * Unwraps a secret key using root key with AES-GCM algorithm.
      *
-     * @param wrappedKey The wrapped secret key.
      * @param iv A 12 byte IV used to wrap this secret key.
+     * @param wrappedKey The wrapped secret key.
      */
-    fun unwrap(wrappedKey: ByteArray, iv: ByteArray): Key {
-        return Cipher.getInstance("AES/GCM/NoPadding").run {
-            init(Cipher.UNWRAP_MODE, retrieve(), GCMParameterSpec(96, iv))
-            unwrap(wrappedKey, "", Cipher.SECRET_KEY)
+    fun unwrap(iv: ByteArray, wrappedKey: ByteArray): Key {
+        return Cipher.getInstance("AES/CBC/PKCS7Padding").run {
+            init(Cipher.UNWRAP_MODE, retrieve(), IvParameterSpec(iv))
+            unwrap(wrappedKey, "AES", Cipher.SECRET_KEY)
         }
     }
 }
