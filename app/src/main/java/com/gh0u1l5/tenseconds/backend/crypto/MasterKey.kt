@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
+import android.util.Log
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoObjects.sAndroidKeyStore
@@ -14,6 +15,7 @@ import com.gh0u1l5.tenseconds.backend.crypto.EraseUtils.erase
 import com.gh0u1l5.tenseconds.global.CharType.fromCharTypesToCharArray
 import com.gh0u1l5.tenseconds.global.Constants.PBKDF2_ITERATIONS
 import java.security.KeyStore
+import java.security.KeyStoreException
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
@@ -88,12 +90,13 @@ object MasterKey {
         val key = derive(identityId, passphrase)
         try {
             // Update local storage
-            // TODO: catch error caused by no fingerprints
             val entry = KeyStore.SecretKeyEntry(key)
             sAndroidKeyStore.setEntry("$identityId-master", entry, sMasterKeyProtection)
             // Update remote storage
             val data = mapOf("master" to hash(identityId, key.encoded).fromBytesToHexString())
             Store.IdentityCollection.update(identityId, data)
+        } catch (e: KeyStoreException) {
+            Log.w(javaClass.simpleName, e)
         } finally {
             (key as SecretKeySpec).erase()
         }

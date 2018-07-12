@@ -2,7 +2,6 @@
 
 package com.gh0u1l5.tenseconds.backend.crypto
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.hardware.biometrics.BiometricPrompt
@@ -13,6 +12,7 @@ import android.os.CancellationSignal
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
 import android.support.annotation.RequiresApi
+import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoObjects.sAndroidKeyStore

@@ -112,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
                         password.requestFocus()
                     }
                     else -> {
-                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
                     }
                 }
             }
