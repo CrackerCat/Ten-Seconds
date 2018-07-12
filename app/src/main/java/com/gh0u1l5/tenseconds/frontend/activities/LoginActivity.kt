@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.frontend.activity
+package com.gh0u1l5.tenseconds.frontend.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

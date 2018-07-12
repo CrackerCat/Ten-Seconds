@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.frontend.adapter
+package com.gh0u1l5.tenseconds.frontend.adapters
 
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView

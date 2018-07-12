@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.backend.service
+package com.gh0u1l5.tenseconds.backend.services
 
 import android.accessibilityservice.AccessibilityService
 import android.os.Bundle

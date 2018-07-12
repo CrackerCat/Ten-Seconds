@@ -1,4 +1,4 @@
-package com.gh0u1l5.tenseconds.frontend.activity
+package com.gh0u1l5.tenseconds.frontend.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +14,7 @@ import android.widget.TextView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
-import com.gh0u1l5.tenseconds.frontend.adapter.IdentityAdapter
+import com.gh0u1l5.tenseconds.frontend.adapters.IdentityAdapter
 import com.gh0u1l5.tenseconds.frontend.fragments.AddIdentityDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
