@@ -1,5 +1,6 @@
 package com.gh0u1l5.tenseconds.backend.crypto
 
+import android.util.Log
 import javax.crypto.spec.SecretKeySpec
 
 object EraseUtils {
@@ -21,9 +22,13 @@ object EraseUtils {
      * Erases a raw secret key using reflection.
      */
     fun SecretKeySpec.erase() {
-        val keyField = this.javaClass.getDeclaredField("key").apply {
-            isAccessible = true
+        try {
+            val keyField = javaClass.getDeclaredField("key").apply {
+                isAccessible = true
+            }
+            (keyField.get(this) as ByteArray).erase()
+        } catch (e: Exception) {
+            Log.w("EraseUtils", e)
         }
-        (keyField.get(this) as ByteArray).erase()
     }
 }
