@@ -132,7 +132,8 @@ object MasterKey {
     }
 
     /**
-     * Uses the master key to generate a password for the given account.
+     * Uses the master key to generate a password for the given account. Notice that it is caller's
+     * responsibility to clean the generated password.
      *
      * @param context The context for current operation
      * @param identityId The identityId that owns this account
@@ -151,8 +152,8 @@ object MasterKey {
             override fun onSuccess(cipher: Cipher) {
                 val source = "$accountId#${account.username}@${account.domain}".toByteArray()
                 val buffer = cipher.doFinal(source)
-                val password = CharArray(account.specification.length)
                 try {
+                    val password = CharArray(account.specification.length)
                     val chars = account.specification.types.fromCharTypesToCharArray()
                     success(password.apply {
                         for (i in 0 until size) {
@@ -162,7 +163,6 @@ object MasterKey {
                     })
                 } finally {
                     buffer.erase()
-                    password.erase()
                 }
             }
         })
