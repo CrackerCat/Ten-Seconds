@@ -7,7 +7,7 @@
     <color name="colorActionBarTitleLight">#ffffff</color>
     <color name="colorFloatingActionButton">#e3f2fd</color>
 
-    <color name="colorCardBackground">#f1f8fd</color>
+    <color name="colorCardBackground">#f9fdff</color>
     <color name="colorDialogBackground">#e3f2fd</color>
 
     <color name="colorInputDark">#0b2f69</color>
