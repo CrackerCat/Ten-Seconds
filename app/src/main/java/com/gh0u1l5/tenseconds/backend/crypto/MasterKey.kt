@@ -175,6 +175,7 @@ object MasterKey {
      * Deletes the master key bounded by the given identityId locally.
      */
     fun delete(identityId: String) {
+        // TODO: remove master key if the remote hash changed.
         sAndroidKeyStore.deleteEntry(identityId)
     }
 }

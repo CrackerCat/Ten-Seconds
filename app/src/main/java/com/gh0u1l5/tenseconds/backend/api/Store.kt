@@ -34,11 +34,11 @@ object Store {
                     ?.withFailureLog("FireStore")
         }
 
-        fun fetchAll(): Task<Map<String, Identity>>? {
+        fun fetchAll(): Task<List<Pair<String, Identity>>>? {
             return takeCollection()
                     ?.get()
                     ?.continueWith { task ->
-                        task.result.associate { identity ->
+                        task.result.map { identity ->
                             identity.id to identity.toObject(Identity::class.java)
                         }
                     }
@@ -82,11 +82,11 @@ object Store {
                     ?.withFailureLog("FireStore")
         }
 
-        fun fetchAll(identityId: String): Task<Map<String, Account>>? {
+        fun fetchAll(identityId: String): Task<List<Pair<String, Account>>>? {
             return takeCollection(identityId)
                     ?.get()
                     ?.continueWith { task ->
-                        task.result.associate { account ->
+                        task.result.map { account ->
                             account.id to account.toObject(Account::class.java)
                         }
                     }
