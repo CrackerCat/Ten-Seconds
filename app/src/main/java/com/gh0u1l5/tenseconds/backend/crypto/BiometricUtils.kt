@@ -79,21 +79,6 @@ object BiometricUtils {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     callback.onSuccess(result.cryptoObject.cipher)
                 }
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
-                    when (errorCode) {
-                        BiometricPrompt.BIOMETRIC_ERROR_CANCELED,
-                        BiometricPrompt.BIOMETRIC_ERROR_USER_CANCELED -> return
-                        BiometricPrompt.BIOMETRIC_ERROR_NO_BIOMETRICS -> {
-                            callback.onNoBiometrics(context, errString)
-                        }
-                        BiometricPrompt.BIOMETRIC_ERROR_HW_NOT_PRESENT -> {
-                            callback.onHardwareNotPresent(context, errString)
-                        }
-                        else -> {
-                            Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
             })
         } else {
             val crypto = FingerprintManager.CryptoObject(cipher)
