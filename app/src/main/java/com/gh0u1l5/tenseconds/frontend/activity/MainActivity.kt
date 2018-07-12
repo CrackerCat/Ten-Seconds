@@ -13,7 +13,6 @@ import android.view.MenuItem
 import android.widget.TextView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
-import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
 import com.gh0u1l5.tenseconds.frontend.adapter.IdentityAdapter
 import com.gh0u1l5.tenseconds.frontend.fragments.AddIdentityDialogFragment
@@ -51,16 +50,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // TODO: handle this situation gracefully
                 return@setOnClickListener
             }
-            AddIdentityDialogFragment().show(supportFragmentManager, "AddIdentity")
+            AddIdentityDialogFragment().apply {
+                addOnFinishedListener {
+                    identityListAdapter.refreshData()
+                }
+                show(supportFragmentManager, "AddIdentity")
+            }
         }
 
         main_container.setOnRefreshListener {
-            Store.IdentityCollection.fetchAll()
-                    ?.addOnSuccessListener {
-                        identityListAdapter.update(it)
-                        identityListAdapter.notifyDataSetChanged()
-                        main_container.isRefreshing = false
-                    }
+            identityListAdapter.refreshData()
         }
     }
 
@@ -73,6 +72,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return
         }
 
+        identityListAdapter.refreshData()
+
         val header = nav_view.getHeaderView(0)
         if (user.email != null) {
             val username = user.email?.substringBefore('@')?.capitalize()
@@ -83,12 +84,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             header.findViewById<TextView>(R.id.user_nickname).text = username
             header.findViewById<TextView>(R.id.user_email).text = "unknown@somewhere.com"
         }
-
-        Store.IdentityCollection.fetchAll()
-                ?.addOnSuccessListener {
-                    identityListAdapter.update(it)
-                    identityListAdapter.notifyDataSetChanged()
-                }
     }
 
     override fun onBackPressed() {

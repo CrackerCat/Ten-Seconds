@@ -17,8 +17,12 @@ class IdentityAdapter(var data: List<Pair<String, Identity>>) : RecyclerView.Ada
         val deleteIdentity: ImageButton = card.findViewById(R.id.identity_card_delete_identity)
     }
 
-    fun update(data: List<Pair<String, Identity>>) {
-        this.data = data
+    fun refreshData() {
+        Store.IdentityCollection.fetchAll()
+                ?.addOnSuccessListener {
+                    data = it
+                    notifyDataSetChanged()
+                }
     }
 
     override fun getItemCount(): Int = data.size
@@ -31,7 +35,9 @@ class IdentityAdapter(var data: List<Pair<String, Identity>>) : RecyclerView.Ada
                 // TODO: popup up correct dialog
             }
             deleteIdentity.setOnClickListener {
+                // TODO: add alert dialog
                 Store.IdentityCollection.delete(card.tag as String)
+                refreshData()
             }
         }
     }

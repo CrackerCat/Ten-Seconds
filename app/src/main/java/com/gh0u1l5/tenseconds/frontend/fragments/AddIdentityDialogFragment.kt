@@ -14,6 +14,9 @@ import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.getPassword
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 
 class AddIdentityDialogFragment : BaseDialogFragment() {
+
+    private val onFinishedListeners: MutableList<() -> Unit> = mutableListOf()
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = activity!!.layoutInflater.inflate(R.layout.dialog_add_identity, null)
         return AlertDialog.Builder(activity!!, R.style.AppTheme_Dialog)
@@ -28,6 +31,10 @@ class AddIdentityDialogFragment : BaseDialogFragment() {
                         positive.setOnClickListener { attemptAdd(this) }
                     }
                 }
+    }
+
+    fun addOnFinishedListener(onFinishedListener: () -> Unit) {
+        onFinishedListeners.add(onFinishedListener)
     }
 
     private fun attemptAdd(dialog: AlertDialog) {
@@ -72,6 +79,7 @@ class AddIdentityDialogFragment : BaseDialogFragment() {
             Store.IdentityCollection.add(Identity(nickname, ""))
                     ?.addOnSuccessListener {
                         MasterKey.update(it.id, passphrase)
+                        onFinishedListeners.forEach { it.invoke() }
                         dialog.dismiss()
                     }
                     ?.addOnFailureListener { e ->
