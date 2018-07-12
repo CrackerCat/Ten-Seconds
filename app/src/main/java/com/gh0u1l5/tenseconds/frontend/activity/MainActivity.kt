@@ -16,6 +16,7 @@ import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
+import com.gh0u1l5.tenseconds.backend.service.LockerService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         Store.AccountCollection.fetch(identityId, accountId)
                                 ?.addOnSuccessListener { account ->
                                     MasterKey.access(this, identityId, accountId, account) {
-                                        Log.w("RESULT", it.joinToString(""))
+                                        LockerService.activate(it.clone())
                                     }
                                 }
                     }
