@@ -7,7 +7,12 @@
     <color name="colorActionBarTitleLight">#ffffff</color>
     <color name="colorFloatingActionButton">#e3f2fd</color>
 
+    <color name="colorDialogBackground">#e3f2fd</color>
+
+    <color name="colorInputDark">#0b2f69</color>
     <color name="colorInputLight">#d0e2ff</color>
+    <color name="colorInputHintDark">#417ad9</color>
     <color name="colorInputHintLight">#aeccfd</color>
-    <color name="colorInputBackgroundGrey">#b12c6bd4</color>
+    <color name="colorInputBackgroundDark">#b12c6bd4</color>
+    <color name="colorInputBackgroundLight">#b1bfccd6</color>
 </resources>

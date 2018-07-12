@@ -8,15 +8,12 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
-import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
-import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
-import com.gh0u1l5.tenseconds.backend.service.LockerService
+import com.gh0u1l5.tenseconds.frontend.fragments.AddIdentityDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -34,18 +31,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // TODO: handle this situation gracefully
                 return@setOnClickListener
             }
-            val identityId = "iwEgyOOS74iX3mS3U90V"
-            val accountId = "aU1PTgw4kf05DtHFo4W9"
-            Store.IdentityCollection.fetch(identityId)
-                    ?.addOnSuccessListener { _ ->
-                        MasterKey.update(identityId, "passphrase".toCharArray())
-                        Store.AccountCollection.fetch(identityId, accountId)
-                                ?.addOnSuccessListener { account ->
-                                    MasterKey.access(this, identityId, accountId, account) {
-                                        LockerService.activate(it.clone())
-                                    }
-                                }
-                    }
+            AddIdentityDialogFragment().show(supportFragmentManager, "AddIdentity")
         }
 
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar,

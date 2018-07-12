@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">10s</string>
 
-    <string name="title_activity_main">10 Seconds</string>
-    <string name="title_activity_login">Sign in</string>
     <string name="description_service_locker">The locker service provided by 10s for pasting the passwords securely.</string>
 
     <string name="biometric_prompt_title">Fingerprint Required</string>
@@ -12,6 +10,7 @@
     <string name="button_cancel">Cancel</string>
 
     <!-- Strings related to main activity -->
+    <string name="title_activity_main">10 Seconds</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_avatar">User Avatar</string>
@@ -20,6 +19,7 @@
     <string name="nav_title_exit">Exit</string>
 
     <!-- Strings related to login activity -->
+    <string name="title_activity_login">Sign in</string>
     <string name="action_sign_in">Login</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -27,4 +27,11 @@
     <string name="error_invalid_email">This email is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_login_failed">The username not found or password incorrect.</string>
+
+    <!-- Strings related to add identity dialog -->
+    <string name="title_dialog_add_identity">Add Identity</string>
+    <string name="action_add_identity">Add</string>
+    <string name="prompt_nickname">Nickname</string>
+    <string name="prompt_passphrase">Passphrase</string>
+    <string name="error_invalid_passphrase">This passphrase to too short</string>
 </resources>
