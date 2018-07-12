@@ -68,7 +68,6 @@ object BiometricUtils {
             val executor = AsyncTask.THREAD_POOL_EXECUTOR
             val prompt = BiometricPrompt.Builder(context)
                     .setTitle(context.getString(R.string.biometric_prompt_title))
-                    .setSubtitle(context.getString(R.string.biometric_prompt_subtitle))
                     .setDescription(context.getString(R.string.biometric_prompt_description))
                     .setNegativeButton(cancel, executor, DialogInterface.OnClickListener { dialog, _ ->
                         dialog.dismiss()
