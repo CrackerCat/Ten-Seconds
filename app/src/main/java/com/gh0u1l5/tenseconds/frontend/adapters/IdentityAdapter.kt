@@ -17,11 +17,12 @@ class IdentityAdapter(var data: List<Pair<String, Identity>>) : RecyclerView.Ada
         val deleteIdentity: ImageButton = card.findViewById(R.id.identity_card_delete_identity)
     }
 
-    fun refreshData() {
+    fun refreshData(notifyRefreshFinished: () -> Unit = { }) {
         Store.IdentityCollection.fetchAll()
                 ?.addOnSuccessListener {
                     data = it
                     notifyDataSetChanged()
+                    notifyRefreshFinished()
                 }
     }
 

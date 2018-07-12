@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
@@ -59,7 +60,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         main_container.setOnRefreshListener {
-            identityListAdapter.refreshData()
+            identityListAdapter.refreshData {
+                main_container.isRefreshing = false
+            }
         }
     }
 
@@ -72,7 +75,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return
         }
 
-        identityListAdapter.refreshData()
+        identityListAdapter.refreshData {
+            main_progress.visibility = View.GONE
+            main_container.visibility = View.VISIBLE
+        }
 
         val header = nav_view.getHeaderView(0)
         if (user.email != null) {
