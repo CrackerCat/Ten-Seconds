@@ -37,6 +37,9 @@ class LockerService : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
+        if (password == null) {
+            return
+        }
         if (event.eventType == AccessibilityEvent.TYPE_VIEW_LONG_CLICKED) {
             val source = event.source ?: return
             try {
