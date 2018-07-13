@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/white_dialog_background"
+    android:background="@drawable/dialog_background_white"
     android:orientation="vertical">
 
     <ProgressBar
@@ -31,7 +31,7 @@
                 android:id="@+id/identity_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/light_blue_input_background"
+                android:background="@drawable/input_background_light_blue"
                 android:hint="@string/prompt_nickname"
                 android:maxLines="1"
                 android:singleLine="true"
@@ -50,7 +50,7 @@
                 android:id="@+id/identity_passphare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/light_blue_input_background"
+                android:background="@drawable/input_background_light_blue"
                 android:hint="@string/prompt_passphrase"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_add_identity"
