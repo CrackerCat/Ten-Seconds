@@ -9,13 +9,17 @@
     <string name="button_ok">OK</string>
     <string name="button_cancel">Cancel</string>
 
+    <string name="dummy_username">unknown</string>
+    <string name="dummy_domain">somewhere.com</string>
+    <string name="email_separator">\@</string>
+
     <!-- Strings related to main activity -->
     <string name="title_activity_main">10 Seconds</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_avatar">User Avatar</string>
-    <string name="nav_header_nickname">Android Studio</string>
-    <string name="nav_header_email">android.studio@android.com</string>
+    <string name="nav_header_nickname">Unknown</string>
+    <string name="nav_header_email">unknown@somewhere.com</string>
     <string name="nav_title_exit">Exit</string>
 
     <!-- Strings related to login activity -->
