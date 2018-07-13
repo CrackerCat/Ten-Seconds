@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <ImageButton
                 android:id="@+id/identity_card_add_account"

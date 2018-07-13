@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Identity
+import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 
 class IdentityAdapter(var data: List<Pair<String, Identity>>) : RecyclerView.Adapter<IdentityAdapter.ViewHolder>() {
     class ViewHolder(val card: CardView) : RecyclerView.ViewHolder(card) {
@@ -19,10 +20,11 @@ class IdentityAdapter(var data: List<Pair<String, Identity>>) : RecyclerView.Ada
 
     fun refreshData(notifyRefreshFinished: () -> Unit = { }) {
         Store.IdentityCollection.fetchAll()
-                ?.addOnSuccessListener {
-                    data = it
+                ?.addOnSuccessListener { data ->
+                    this.data = data
                     notifyDataSetChanged()
                     notifyRefreshFinished()
+                    MasterKey.cleanup(data.map { it.first })
                 }
     }
 

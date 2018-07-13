@@ -58,7 +58,6 @@ object Store {
         }
 
         fun delete(identityId: String): Task<Void>? {
-            MasterKey.delete(identityId)
             return takeDocument(identityId)
                     ?.delete()
                     ?.withFailureLog("FireStore")

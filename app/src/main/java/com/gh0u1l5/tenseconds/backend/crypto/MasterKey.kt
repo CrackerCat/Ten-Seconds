@@ -21,6 +21,7 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
+import kotlin.concurrent.thread
 
 /**
  * This object wraps all the cryptographic operations related to the master keys. A master key
@@ -172,10 +173,18 @@ object MasterKey {
     }
 
     /**
-     * Deletes the master key bounded by the given identityId locally.
+     * Deletes all the master keys that are no longer used.
+     *
+     * @param identityIds The list of alive identities.
      */
-    fun delete(identityId: String) {
-        // TODO: remove master key if the remote hash changed.
-        sAndroidKeyStore.deleteEntry(identityId)
+    fun cleanup(identityIds: List<String>) {
+        thread(start = true) {
+            sAndroidKeyStore.aliases().iterator().forEach { alias ->
+                val identityId = alias.removeSuffix("-master")
+                if (identityId !in identityIds) {
+                    sAndroidKeyStore.deleteEntry(alias)
+                }
+            }
+        }
     }
 }
