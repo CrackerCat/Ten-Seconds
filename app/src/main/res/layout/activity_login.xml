@@ -21,7 +21,7 @@
         app:srcCompat="@mipmap/ic_launcher" />
 
     <ProgressBar
-        android:id="@+id/login_progress"
+        android:id="@+id/login_loading"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

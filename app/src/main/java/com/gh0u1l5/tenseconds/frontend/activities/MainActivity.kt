@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         identityListAdapter.refreshData {
-            main_progress.visibility = View.GONE
+            main_loading.visibility = View.GONE
             main_container.visibility = View.VISIBLE
         }
 

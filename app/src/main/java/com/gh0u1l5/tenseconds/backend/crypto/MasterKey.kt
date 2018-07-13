@@ -46,6 +46,16 @@ object MasterKey {
     }
 
     /**
+     * Calculate the salted hash of a master key as SHA256(identityId + rawKey).
+     *
+     * @param identityId The identityId bounded to this master key
+     * @param rawKey The raw master key stored in a ByteArray
+     */
+    private fun hash(identityId: String, rawKey: ByteArray): ByteArray {
+        return digestWithSHA256(identityId.toByteArray(), rawKey)
+    }
+
+    /**
      * Derives an AES-256 master key from a passphrase using PBKDF2.
      *
      * @param identityId The identityId bounded to this master key, which will be used as the salt
@@ -65,16 +75,6 @@ object MasterKey {
             keyBuffer?.erase()
             passphrase.erase()
         }
-    }
-
-    /**
-     * Calculate the salted hash of a master key as SHA256(identityId + rawKey).
-     *
-     * @param identityId The identityId bounded to this master key
-     * @param rawKey The raw master key stored in a ByteArray
-     */
-    private fun hash(identityId: String, rawKey: ByteArray): ByteArray {
-        return digestWithSHA256(identityId.toByteArray(), rawKey)
     }
 
     /**
@@ -130,7 +130,7 @@ object MasterKey {
      *
      * @param identityId The identityId bounded to this master key
      */
-    private fun retrieve(identityId: String): SecretKey? {
+    fun retrieve(identityId: String): SecretKey? {
         val entry = sAndroidKeyStore.getEntry("$identityId-master", null)
         return (entry as? KeyStore.SecretKeyEntry)?.secretKey
     }
@@ -145,7 +145,7 @@ object MasterKey {
      * @param account The basic account information
      * @param success The success callback, which will receive the generated password
      */
-    fun access(context: Context, identityId: String, accountId: String, account: Account, success: (CharArray) -> Unit) {
+    fun process(context: Context, identityId: String, accountId: String, account: Account, success: (CharArray) -> Unit) {
         val key = retrieve(identityId) ?: throw IllegalStateException("invalid master key")
         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding").apply {
             init(Cipher.ENCRYPT_MODE, key, IvParameterSpec(ByteArray(16) {

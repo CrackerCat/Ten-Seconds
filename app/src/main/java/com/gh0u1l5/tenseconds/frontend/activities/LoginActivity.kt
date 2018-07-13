@@ -133,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showProgress(show: Boolean) {
         // The ViewPropertyAnimator APIs are not available, so simply show
         // and hide the relevant UI components.
-        login_progress.visibility = if (show) View.VISIBLE else View.GONE
+        login_loading.visibility = if (show) View.VISIBLE else View.GONE
         login_form.visibility = if (show) View.GONE else View.VISIBLE
     }
 }

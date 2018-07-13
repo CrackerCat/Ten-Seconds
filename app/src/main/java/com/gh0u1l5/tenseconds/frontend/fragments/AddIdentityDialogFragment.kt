@@ -95,9 +95,9 @@ class AddIdentityDialogFragment : BaseDialogFragment() {
     private fun showProgress(dialog: AlertDialog, show: Boolean) {
         // The ViewPropertyAnimator APIs are not available, so simply show
         // and hide the relevant UI components.
-        val progress = dialog.findViewById<ProgressBar>(R.id.identity_progress) ?: return
+        val adding = dialog.findViewById<ProgressBar>(R.id.identity_adding) ?: return
         val form = dialog.findViewById<LinearLayout>(R.id.identity_form) ?: return
-        progress.visibility = if (show) View.VISIBLE else View.GONE
+        adding.visibility = if (show) View.VISIBLE else View.GONE
         form.visibility = if (show) View.GONE else View.VISIBLE
     }
 }

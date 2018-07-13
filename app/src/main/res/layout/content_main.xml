@@ -9,7 +9,7 @@
     tools:showIn="@layout/app_bar_main">
 
     <ProgressBar
-        android:id="@+id/main_progress"
+        android:id="@+id/main_loading"
         style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

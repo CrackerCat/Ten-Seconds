@@ -54,8 +54,15 @@
             android:layout_marginBottom="4dp"
             android:background="@color/colorPrimaryDark" />
 
+        <ImageView
+            android:id="@+id/identity_card_lock"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:padding="4dp"
+            card_view:srcCompat="@drawable/ic_lock" />
+
         <ProgressBar
-            android:id="@+id/identity_card_progress_bar"
+            android:id="@+id/identity_card_loading"
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
