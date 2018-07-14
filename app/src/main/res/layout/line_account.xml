@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
-    android:layout_marginEnd="4dp"
-    android:layout_marginStart="4dp"
     android:layout_marginTop="2dp">
 
     <TextView
@@ -12,12 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textColor="@color/colorPrimaryDark" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
 
     <ImageButton
         android:id="@+id/line_account_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_margin="2dp"
         android:layout_weight="0"
         android:background="@drawable/ic_delete"
         android:backgroundTint="@drawable/button_background_tint" />

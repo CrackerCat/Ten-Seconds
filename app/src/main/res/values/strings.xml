@@ -9,7 +9,7 @@
     <string name="button_ok">OK</string>
     <string name="button_cancel">Cancel</string>
 
-    <string name="prompt_add_account">Press the + button to add a new account.</string>
+    <string name="prompt_add_account">Press + to add new accounts.</string>
 
     <!-- Strings related to main activity -->
     <string name="title_activity_main">10 Seconds</string>

@@ -3,6 +3,7 @@ package com.gh0u1l5.tenseconds.frontend.fragments
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -18,7 +19,11 @@ class AddIdentityDialogFragment : BaseDialogFragment() {
     private val onFinishedListeners: MutableList<() -> Unit> = mutableListOf()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = activity!!.layoutInflater.inflate(R.layout.dialog_add_identity, null)
+        val view = activity!!.layoutInflater.inflate(R.layout.dialog_add_identity, null).also {
+            // Add password mask programmatically to support Chinese passphrase
+            val passphrase = it.findViewById<EditText>(R.id.identity_passphrase)
+            passphrase.transformationMethod = PasswordTransformationMethod.getInstance()
+        }
         return AlertDialog.Builder(activity!!, R.style.AppTheme_Dialog)
                 .setView(view)
                 .setTitle(R.string.title_dialog_add_identity)
@@ -39,7 +44,7 @@ class AddIdentityDialogFragment : BaseDialogFragment() {
 
     private fun attemptAdd(dialog: AlertDialog) {
         val nicknameView = dialog.findViewById<EditText>(R.id.identity_nickname) ?: return
-        val passphraseView = dialog.findViewById<EditText>(R.id.identity_passphare) ?: return
+        val passphraseView = dialog.findViewById<EditText>(R.id.identity_passphrase) ?: return
 
         // Reset errors.
         nicknameView.error = null
