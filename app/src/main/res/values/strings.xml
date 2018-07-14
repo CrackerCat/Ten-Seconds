@@ -38,4 +38,10 @@
     <string name="prompt_nickname">Nickname</string>
     <string name="prompt_passphrase">Passphrase</string>
     <string name="error_invalid_passphrase">This passphrase to too short</string>
+
+    <!-- Strings related to add account dialog -->
+    <string name="title_dialog_add_account">Add Account</string>
+    <string name="action_add_account">Add</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_domain">Domain</string>
 </resources>
