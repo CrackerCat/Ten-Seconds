@@ -11,6 +11,13 @@ object Auth {
         FirebaseAuth.getInstance()
     }
 
+    enum class OAuthType {
+        Facebook,
+        GitHub,
+        Google,
+        Twitter,
+    }
+
     /**
      * true if a login attempt is in progress, false otherwise
      */
@@ -29,5 +36,22 @@ object Auth {
         return instance.tryLogin()
                 .addOnCompleteListener { isLoggingIn = false }
                 .withFailureLog("FireAuth")
+    }
+
+    fun retrieveOAuthToken(type: OAuthType) {
+        when (type) {
+            OAuthType.Facebook -> {
+
+            }
+            OAuthType.GitHub -> {
+
+            }
+            OAuthType.Google -> {
+
+            }
+            OAuthType.Twitter -> {
+
+            }
+        }
     }
 }
