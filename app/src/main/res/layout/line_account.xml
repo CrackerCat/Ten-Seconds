@@ -1,43 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginStart="4dp"
     android:layout_marginTop="2dp">
 
-    <LinearLayout
-        android:id="@+id/line_account_body"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/line_account_address"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/line_account_username"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:minWidth="72dp"
-            android:text="@string/dummy_username"
-            android:textColor="@color/colorPrimaryDark" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:text="@string/email_separator"
-            android:textColor="@color/colorPrimaryDark" />
-
-        <TextView
-            android:id="@+id/line_account_domain"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/dummy_domain"
-            android:textColor="@color/colorPrimaryDark" />
-
-    </LinearLayout>
+        android:textColor="@color/colorPrimaryDark" />
 
     <ImageButton
         android:id="@+id/line_account_delete"

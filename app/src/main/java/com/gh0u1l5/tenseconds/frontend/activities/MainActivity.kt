@@ -54,7 +54,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // TODO: handle this situation gracefully
                 return@setOnClickListener
             }
-            startActivity(Intent(this, MainActivity::class.java).apply {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent.apply {
                 action = ACTION_ADD_IDENTITY
             })
         }

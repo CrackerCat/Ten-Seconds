@@ -72,7 +72,9 @@ class AddAccountDialogFragment : BaseDialogFragment() {
             // form field with an error.
             focus?.requestFocus()
         } else {
-            Store.AccountCollection.add(identityId, Account(username, domain, PasswordSpec()))
+            // TODO: add UI components for PasswordSpec
+            val address = "$username@$domain"
+            Store.AccountCollection.add(identityId, Account(address, PasswordSpec()))
                     ?.addOnSuccessListener {
                         onFinishedListeners.forEach { it.invoke() }
                         dialog.dismiss()

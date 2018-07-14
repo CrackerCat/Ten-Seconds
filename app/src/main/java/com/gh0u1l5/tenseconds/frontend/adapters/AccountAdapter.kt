@@ -13,13 +13,12 @@ import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import com.gh0u1l5.tenseconds.backend.services.LockerService
 
 class AccountAdapter(
-        private val identityId: String,
+        val identityId: String,
         private var data: LinkedHashMap<String, Account>? = null
 ) : RecyclerView.Adapter<AccountAdapter.ViewHolder>() {
+
     class ViewHolder(val line: LinearLayout) : RecyclerView.ViewHolder(line) {
-        val username: TextView = line.findViewById(R.id.line_account_username)
-        val domain: TextView = line.findViewById(R.id.line_account_domain)
-        val body: LinearLayout = line.findViewById(R.id.line_account_body)
+        val address: TextView = line.findViewById(R.id.line_account_address)
         val delete: ImageButton = line.findViewById(R.id.line_account_delete)
     }
 
@@ -32,17 +31,24 @@ class AccountAdapter(
                 }
     }
 
-    override fun getItemCount() = data?.size ?: 3
+    override fun getItemCount(): Int {
+        val data = data ?: return 3 // Loading
+        return when {
+            data.isEmpty() -> 1 // Empty Data Set
+            else -> data.size   // Regular Situation
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).run {
             inflate(R.layout.line_account, parent, false) as LinearLayout
         }).apply {
-            body.setOnLongClickListener {
+            address.setOnLongClickListener {
+                val context = parent.context
                 val accountId = line.tag as String
                 val account = data?.get(accountId)
                 if (account != null) {
-                    MasterKey.process(parent.context, identityId, accountId, account) {
+                    MasterKey.process(context, identityId, accountId, account) {
                         LockerService.activate(password = it)
                     }
                 }
@@ -61,20 +67,24 @@ class AccountAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (data == null) {
-            val context = holder.line.context
-            holder.username.text = ""
-            holder.username.background = context.getDrawable(R.drawable.input_background_light_blue)
-            holder.domain.text = ""
-            holder.domain.background = context.getDrawable(R.drawable.input_background_light_blue)
-        } else {
-            val entry = ArrayList(data!!.entries)[position]
-            holder.line.tag = entry.key
-            holder.username.minWidth = 0
-            holder.username.text = entry.value.username
-            holder.username.background = null
-            holder.domain.text = entry.value.domain
-            holder.domain.background = null
+        when {
+            data == null -> { // Loading
+                val context = holder.line.context
+                val background = context.getDrawable(R.drawable.input_background_light_blue)
+                holder.address.text = ""
+                holder.address.background = background
+            }
+            data?.size == 0 -> { // Empty Data Set
+                val context = holder.line.context
+                holder.address.text = context.getText(R.string.prompt_add_account)
+                holder.address.background = null
+            }
+            else -> { // Regular Situation
+                val entry = ArrayList(data!!.entries)[position]
+                holder.line.tag = entry.key
+                holder.address.text = entry.value.address
+                holder.address.background = null
+            }
         }
     }
 }

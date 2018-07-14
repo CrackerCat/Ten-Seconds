@@ -18,8 +18,10 @@ import com.gh0u1l5.tenseconds.frontend.activities.MainActivity
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_ACCOUNT
 import java.util.concurrent.ConcurrentHashMap
 
-class IdentityAdapter(private var data: LinkedHashMap<String, Identity>) :
-        RecyclerView.Adapter<IdentityAdapter.ViewHolder>() {
+class IdentityAdapter(
+        private var data: LinkedHashMap<String, Identity>
+) : RecyclerView.Adapter<IdentityAdapter.ViewHolder>() {
+
     class ViewHolder(val card: CardView) : RecyclerView.ViewHolder(card) {
         val nickname: TextView = card.findViewById(R.id.identity_card_nickname)
         val add: ImageButton = card.findViewById(R.id.identity_card_add_account)
@@ -30,7 +32,6 @@ class IdentityAdapter(private var data: LinkedHashMap<String, Identity>) :
     }
 
     val accountAdapters = ConcurrentHashMap<String, AccountAdapter>()
-    val accountLayoutManagers = ConcurrentHashMap<String, RecyclerView.LayoutManager>()
 
     fun refreshData(notifyRefreshFinished: () -> Unit = { }) {
         Store.IdentityCollection.fetchAll()
@@ -48,9 +49,11 @@ class IdentityAdapter(private var data: LinkedHashMap<String, Identity>) :
         return ViewHolder(LayoutInflater.from(parent.context).run {
             inflate(R.layout.card_identity, parent, false) as CardView
         }).apply {
+            list.layoutManager = LinearLayoutManager(parent.context)
             add.setOnClickListener {
                 val context = parent.context
-                context.startActivity(Intent(context, MainActivity::class.java).apply {
+                val intent = Intent(context, MainActivity::class.java)
+                context.startActivity(intent.apply {
                     action = ACTION_ADD_ACCOUNT
                     putExtra("identityId", card.tag as String)
                 })
@@ -77,14 +80,7 @@ class IdentityAdapter(private var data: LinkedHashMap<String, Identity>) :
         holder.nickname.text = entry.value.nickname
 
         tryUnlockIdentity(holder, entry.key)
-        if (entry.key !in accountAdapters) {
-            accountAdapters[entry.key] = AccountAdapter(entry.key)
-        }
-        holder.list.adapter = accountAdapters[entry.key]
-        if (entry.key !in accountLayoutManagers) {
-            accountLayoutManagers[entry.key] = LinearLayoutManager(holder.card.context)
-        }
-        holder.list.layoutManager = accountLayoutManagers[entry.key]
+        tryDeployAccountAdapter(holder, entry.key)
     }
 
     private fun tryUnlockIdentity(holder: ViewHolder, identityId: String) {
@@ -95,5 +91,16 @@ class IdentityAdapter(private var data: LinkedHashMap<String, Identity>) :
             holder.lock.visibility = View.GONE
             holder.list.visibility = View.VISIBLE
         }
+    }
+
+    private fun tryDeployAccountAdapter(holder: ViewHolder, identityId: String) {
+        if (identityId !in accountAdapters) {
+            accountAdapters[identityId] = AccountAdapter(identityId)
+        }
+        val adapter = holder.list.adapter as? AccountAdapter
+        if (adapter == null || adapter.identityId != identityId) {
+            holder.list.adapter = accountAdapters[identityId]
+        }
+        accountAdapters[identityId]?.refreshData()
     }
 }

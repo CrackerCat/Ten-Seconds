@@ -154,7 +154,7 @@ object MasterKey {
         }
         BiometricUtils.authenticate(context, cipher, object : BiometricUtils.AuthenticationCallback {
             override fun onSuccess(cipher: Cipher) {
-                val source = "$accountId#${account.username}@${account.domain}".toByteArray()
+                val source = "$accountId#${account.address}".toByteArray()
                 val buffer = cipher.doFinal(source)
                 try {
                     val password = CharArray(account.specification.length)
