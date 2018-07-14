@@ -14,6 +14,7 @@ import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
 import com.gh0u1l5.tenseconds.backend.crypto.EraseUtils.erase
 import com.gh0u1l5.tenseconds.global.CharType.fromCharTypesToCharArray
 import com.gh0u1l5.tenseconds.global.Constants.PBKDF2_ITERATIONS
+import com.google.android.gms.tasks.Task
 import java.security.KeyStore
 import java.security.KeyStoreException
 import javax.crypto.Cipher
@@ -78,17 +79,13 @@ object MasterKey {
     }
 
     /**
-     * Updates the passphrase bounded to a specified identity. It will
-     *   1. Generates an AES-256 master key based on the given passphrase.
-     *   2. Stores the master key to local Android Keystore.
-     *   3. Stores the hash SHA256(identityId + SHA256(key)) to FireStore.
+     * Stores a AES-256 master key to both local and remote locations.
      *
      * @param identityId The identityId bounded to this master key
-     * @param passphrase The passphrase used to derive the AES-256 key. Notice that after this
-     * operation, this passphrase will be erased immediately.
+     * @param key The AES-256 master key to be stored. Notice that after this operation, this key
+     * will be erased immediately.
      */
-    fun update(identityId: String, passphrase: CharArray) {
-        val key = derive(identityId, passphrase)
+    private fun store(identityId: String, key: SecretKey) {
         try {
             // Update local storage
             val entry = KeyStore.SecretKeyEntry(key)
@@ -104,25 +101,34 @@ object MasterKey {
     }
 
     /**
+     * Updates the passphrase bounded to a specified identity. It will
+     *   1. Generates an AES-256 master key based on the given passphrase.
+     *   2. Stores the master key to local Android Keystore.
+     *   3. Stores the hash SHA256(identityId + SHA256(key)) to FireStore.
+     *
+     * @param identityId The identityId bounded to this master key
+     * @param passphrase The passphrase used to derive the AES-256 key. Notice that after this
+     * operation, this passphrase will be erased immediately.
+     */
+    fun update(identityId: String, passphrase: CharArray) {
+        store(identityId, derive(identityId, passphrase))
+    }
+
+    /**
      * Verifies that the given passphrase matches the stored hash.
      *
      * @param identityId TThe identityId bounded to this master key
      * @param passphrase The passphrase used to derive the AES-256 key. Notice that after this
      * operation, this passphrase will be erased immediately.
-     * @param success The success callback
      */
-    fun verify(identityId: String, passphrase: CharArray, success: () -> Unit) {
+    fun verify(identityId: String, passphrase: CharArray): Task<Boolean>? {
         val key = derive(identityId, passphrase)
-        try {
-            val hash = hash(identityId, key.encoded).fromBytesToHexString()
-            Store.IdentityCollection.fetch(identityId)?.addOnSuccessListener {
-                if (it.master == hash) {
-                    success()
+        val hash = hash(identityId, key.encoded).fromBytesToHexString()
+        return Store.IdentityCollection.fetch(identityId)
+                ?.continueWith { it.result.master == hash }
+                ?.addOnSuccessListener { match ->
+                    if (match) store(identityId, key)
                 }
-            }
-        } finally {
-            (key as SecretKeySpec).erase()
-        }
     }
 
     /**

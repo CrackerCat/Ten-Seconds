@@ -13,6 +13,7 @@ import com.gh0u1l5.tenseconds.backend.bean.PasswordSpec
 class AddAccountDialogFragment : BaseDialogFragment() {
 
     private var identityId: String = ""
+
     private val onFinishedListeners: MutableList<() -> Unit> = mutableListOf()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

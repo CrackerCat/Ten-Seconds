@@ -1,6 +1,7 @@
 package com.gh0u1l5.tenseconds.frontend.adapters
 
 import android.content.Intent
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -16,6 +17,7 @@ import com.gh0u1l5.tenseconds.backend.bean.Identity
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import com.gh0u1l5.tenseconds.frontend.activities.MainActivity
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_ACCOUNT
+import com.gh0u1l5.tenseconds.global.Constants.ACTION_VERIFY_IDENTITY
 import java.util.concurrent.ConcurrentHashMap
 
 class IdentityAdapter(
@@ -55,21 +57,35 @@ class IdentityAdapter(
                 val intent = Intent(context, MainActivity::class.java)
                 context.startActivity(intent.apply {
                     action = ACTION_ADD_ACCOUNT
-                    putExtra("identityId", card.tag as String)
+                    putExtra("identityId", card.tag as? String)
                 })
             }
             delete.setOnClickListener {
-                // TODO: popup alert dialog for delete
-                val identityId = card.tag as String
-                Store.IdentityCollection.delete(identityId)
-                        ?.addOnSuccessListener {
-                            data.remove(identityId)
-                            notifyDataSetChanged()
+                AlertDialog.Builder(parent.context)
+                        .setTitle(R.string.title_dialog_delete_alert)
+                        .setMessage(R.string.message_dialog_delete_alert)
+                        .setPositiveButton(R.string.button_ok) { _, _ ->
+                            val identityId = card.tag as? String
+                            if (identityId != null) {
+                                Store.IdentityCollection.delete(identityId)
+                                        ?.addOnSuccessListener {
+                                            data.remove(identityId)
+                                            notifyDataSetChanged()
+                                        }
+                            }
                         }
+                        .setNegativeButton(R.string.button_cancel) { dialog, _ ->
+                            dialog.cancel()
+                        }
+                        .show()
             }
             lock.setOnClickListener {
-                // TODO: popup verify dialog
-                tryUnlockIdentity(this, card.tag as String)
+                val context = parent.context
+                val intent = Intent(context, MainActivity::class.java)
+                context.startActivity(intent.apply {
+                    action = ACTION_VERIFY_IDENTITY
+                    putExtra("identityId", card.tag as? String)
+                })
             }
         }
     }

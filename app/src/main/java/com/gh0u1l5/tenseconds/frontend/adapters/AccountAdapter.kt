@@ -1,5 +1,6 @@
 package com.gh0u1l5.tenseconds.frontend.adapters
 
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -44,10 +45,10 @@ class AccountAdapter(
             inflate(R.layout.line_account, parent, false) as LinearLayout
         }).apply {
             address.setOnLongClickListener {
-                val context = parent.context
-                val accountId = line.tag as String
+                val accountId = line.tag as? String
                 val account = data?.get(accountId)
-                if (account != null) {
+                if (accountId != null && account != null) {
+                    val context = parent.context
                     MasterKey.process(context, identityId, accountId, account) {
                         LockerService.activate(password = it)
                     }
@@ -55,13 +56,23 @@ class AccountAdapter(
                 return@setOnLongClickListener true
             }
             delete.setOnClickListener {
-                // TODO: popup alert dialog for delete
-                val accountId = line.tag as? String ?: return@setOnClickListener
-                Store.AccountCollection.delete(identityId, accountId)
-                        ?.addOnSuccessListener {
-                            data?.remove(accountId)
-                            notifyDataSetChanged()
+                AlertDialog.Builder(parent.context)
+                        .setTitle(R.string.title_dialog_delete_alert)
+                        .setMessage(R.string.message_dialog_delete_alert)
+                        .setPositiveButton(R.string.button_ok) { _, _ ->
+                            val accountId = line.tag as? String
+                            if (accountId != null) {
+                                Store.AccountCollection.delete(identityId, accountId)
+                                        ?.addOnSuccessListener {
+                                            data?.remove(accountId)
+                                            notifyDataSetChanged()
+                                        }
+                            }
                         }
+                        .setNegativeButton(R.string.button_cancel) { dialog, _ ->
+                            dialog.cancel()
+                        }
+                        .show()
             }
         }
     }

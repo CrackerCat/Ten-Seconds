@@ -18,8 +18,10 @@ import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
 import com.gh0u1l5.tenseconds.frontend.adapters.IdentityAdapter
 import com.gh0u1l5.tenseconds.frontend.fragments.AddAccountDialogFragment
 import com.gh0u1l5.tenseconds.frontend.fragments.AddIdentityDialogFragment
+import com.gh0u1l5.tenseconds.frontend.fragments.VerifyIdentityDialogFragment
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_ACCOUNT
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_IDENTITY
+import com.gh0u1l5.tenseconds.global.Constants.ACTION_VERIFY_IDENTITY
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -131,6 +133,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         identityAdapter.accountAdapters[identityId]?.refreshData()
                     }
                     show(supportFragmentManager, "AddAccount")
+                }
+            }
+            ACTION_VERIFY_IDENTITY -> {
+                VerifyIdentityDialogFragment().apply {
+                    val identityId = intent.getStringExtra("identityId") ?: return
+                    setIdentity(identityId)
+                    addOnFinishedListener {
+                        identityAdapter.notifyDataSetChanged() // TODO: does this work?
+                    }
+                    show(supportFragmentManager, "VerifyIdentity")
                 }
             }
         }

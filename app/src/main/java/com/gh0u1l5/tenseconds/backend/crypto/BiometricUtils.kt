@@ -70,7 +70,7 @@ object BiometricUtils {
                     .setTitle(context.getString(R.string.biometric_prompt_title))
                     .setDescription(context.getString(R.string.biometric_prompt_description))
                     .setNegativeButton(cancel, executor, DialogInterface.OnClickListener { dialog, _ ->
-                        dialog.dismiss()
+                        dialog.cancel()
                         cancelSignal.cancel()
                     })
                     .build()
@@ -87,7 +87,7 @@ object BiometricUtils {
                     .setTitle(R.string.biometric_prompt_title)
                     .setMessage(R.string.biometric_prompt_description)
                     .setNegativeButton(cancel) { dialog, _ ->
-                        dialog.dismiss()
+                        dialog.cancel()
                         cancelSignal.cancel()
                     }
                     .show()

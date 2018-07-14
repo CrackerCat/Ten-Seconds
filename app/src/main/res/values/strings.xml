@@ -42,4 +42,13 @@
     <string name="action_add_account">Add</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_domain">Domain</string>
+
+    <!-- Strings related to verify identity dialog -->
+    <string name="title_dialog_verify_identity">Verify Identity</string>
+    <string name="action_verify_identity">Verify</string>
+    <string name="error_verify_failed">The passphrase does not match this identity.</string>
+
+    <!-- Strings related to delete alert dialog -->
+    <string name="title_dialog_delete_alert">Warning</string>
+    <string name="message_dialog_delete_alert">Warning! These data are not recoverable, continue?</string>
 </resources>
