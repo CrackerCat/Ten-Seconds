@@ -28,12 +28,12 @@ object BiometricUtils {
         }
 
         fun onNoBiometrics(context: Context, errString: CharSequence?) {
-            // TODO: handle this situation gracefully
+            // TODO: handle this situation more gracefully
             Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
         }
 
         fun onHardwareNotPresent(context: Context, errString: CharSequence?) {
-            // TODO: handle this situation gracefully
+            // TODO: handle this situation more gracefully
             Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
         }
     }
@@ -48,7 +48,7 @@ object BiometricUtils {
         }
     }
 
-    fun hasValidBiometrics(): Boolean {
+    fun isBiometricsAvailable(): Boolean {
         val key = ByteArray(32) { 0 }
         val entry = KeyStore.SecretKeyEntry(SecretKeySpec(key, "AES"))
         try {

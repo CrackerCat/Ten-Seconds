@@ -13,18 +13,33 @@ import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import com.gh0u1l5.tenseconds.backend.services.LockerService
 import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
+import java.util.concurrent.ConcurrentHashMap
 
 class AccountAdapter(
         val identityId: String,
         private var data: LinkedHashMap<String, Account>? = null
 ) : RecyclerView.Adapter<AccountAdapter.ViewHolder>() {
 
+    companion object {
+        val sAccountAdapters = ConcurrentHashMap<String, AccountAdapter>()
+    }
+
     class ViewHolder(val line: LinearLayout) : RecyclerView.ViewHolder(line) {
         val address: TextView = line.findViewById(R.id.line_account_address)
         val delete: ImageButton = line.findViewById(R.id.line_account_delete)
     }
 
-    fun refreshData(notifyRefreshFinished: () -> Unit = { }) {
+    fun add(accountId: String, account: Account) {
+        data?.set(accountId, account)
+        notifyDataSetChanged()
+    }
+
+    fun remove(accountId: String) {
+        data?.remove(accountId)
+        notifyDataSetChanged()
+    }
+
+    fun refresh(notifyRefreshFinished: () -> Unit = { }) {
         Store.AccountCollection.fetchAll(identityId)
                 ?.addOnSuccessListener { data ->
                     this.data = data
@@ -65,8 +80,7 @@ class AccountAdapter(
                             if (accountId != null) {
                                 Store.AccountCollection.delete(identityId, accountId)
                                         ?.addOnSuccessListener {
-                                            data?.remove(accountId)
-                                            notifyDataSetChanged()
+                                            remove(accountId)
                                         }
                             }
                         }

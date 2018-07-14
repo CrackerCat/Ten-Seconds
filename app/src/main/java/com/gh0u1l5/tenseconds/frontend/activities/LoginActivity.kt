@@ -38,11 +38,8 @@ class LoginActivity : AppCompatActivity() {
         super.onStart()
         val status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
         if (status != ConnectionResult.SUCCESS) {
-            // TODO: this crash is too ugly
-            val name = getString(R.string.app_name)
-            val prompt = getString(R.string.common_google_play_services_unsupported_text, name)
-            Toast.makeText(this, prompt, Toast.LENGTH_LONG).show()
-            finishAffinity()
+            login_form.visibility = View.GONE
+            login_invalid_message.visibility = View.VISIBLE
         }
     }
 

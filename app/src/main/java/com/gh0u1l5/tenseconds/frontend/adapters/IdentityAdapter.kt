@@ -17,6 +17,7 @@ import com.gh0u1l5.tenseconds.backend.bean.Identity
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
 import com.gh0u1l5.tenseconds.frontend.activities.MainActivity
+import com.gh0u1l5.tenseconds.frontend.adapters.AccountAdapter.Companion.sAccountAdapters
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_ACCOUNT
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_VERIFY_IDENTITY
 import java.util.concurrent.ConcurrentHashMap
@@ -24,6 +25,10 @@ import java.util.concurrent.ConcurrentHashMap
 class IdentityAdapter(
         private var data: LinkedHashMap<String, Identity>
 ) : RecyclerView.Adapter<IdentityAdapter.ViewHolder>() {
+
+    companion object {
+        val sIdentityAdapter = IdentityAdapter(LinkedHashMap())
+    }
 
     class ViewHolder(val card: CardView) : RecyclerView.ViewHolder(card) {
         val nickname: TextView = card.findViewById(R.id.identity_card_nickname)
@@ -34,9 +39,17 @@ class IdentityAdapter(
         val list: RecyclerView = card.findViewById(R.id.identity_card_account_list)
     }
 
-    val accountAdapters = ConcurrentHashMap<String, AccountAdapter>()
+    fun add(identityId: String, identity: Identity) {
+        data[identityId] = identity
+        notifyDataSetChanged()
+    }
 
-    fun refreshData(notifyRefreshFinished: () -> Unit = { }) {
+    fun remove(identityId: String) {
+        data.remove(identityId)
+        notifyDataSetChanged()
+    }
+
+    fun refresh(notifyRefreshFinished: () -> Unit = { }) {
         Store.IdentityCollection.fetchAll()
                 ?.addOnSuccessListener { data ->
                     this.data = data
@@ -70,8 +83,7 @@ class IdentityAdapter(
                             if (identityId != null) {
                                 Store.IdentityCollection.delete(identityId)
                                         ?.addOnSuccessListener {
-                                            data.remove(identityId)
-                                            notifyDataSetChanged()
+                                            remove(identityId)
                                         }
                             }
                         }
@@ -116,13 +128,13 @@ class IdentityAdapter(
     }
 
     private fun tryDeployAccountAdapter(holder: ViewHolder, identityId: String) {
-        if (identityId !in accountAdapters) {
-            accountAdapters[identityId] = AccountAdapter(identityId)
+        if (identityId !in sAccountAdapters) {
+            sAccountAdapters[identityId] = AccountAdapter(identityId)
         }
         val adapter = holder.list.adapter as? AccountAdapter
         if (adapter == null || adapter.identityId != identityId) {
-            holder.list.adapter = accountAdapters[identityId]
+            holder.list.adapter = sAccountAdapters[identityId]
         }
-        accountAdapters[identityId]?.refreshData()
+        sAccountAdapters[identityId]?.refresh()
     }
 }

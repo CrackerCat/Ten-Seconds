@@ -18,7 +18,7 @@ import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
 
 class AddIdentityDialogFragment : DialogFragment() {
 
-    private val onFinishedListeners: MutableList<() -> Unit> = mutableListOf()
+    private val onFinishedListeners = mutableListOf<(String, Identity) -> Unit>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = activity!!.layoutInflater.inflate(R.layout.dialog_add_identity, null).also {
@@ -40,7 +40,7 @@ class AddIdentityDialogFragment : DialogFragment() {
                 }
     }
 
-    fun addOnFinishedListener(onFinishedListener: () -> Unit) {
+    fun addOnFinishedListener(onFinishedListener: (String, Identity) -> Unit) {
         onFinishedListeners.add(onFinishedListener)
     }
 
@@ -83,10 +83,13 @@ class AddIdentityDialogFragment : DialogFragment() {
             focus?.requestFocus()
         } else {
             showProgress(dialog, true)
-            Store.IdentityCollection.add(Identity(nickname, ""))
+            val identity = Identity(nickname, "")
+            Store.IdentityCollection.add(identity)
                     ?.addOnSuccessListener {
                         MasterKey.update(it.id, passphrase)
-                        onFinishedListeners.forEach { it.invoke() }
+                        onFinishedListeners.forEach { listener ->
+                            listener.invoke(it.id, identity)
+                        }
                         dialog.dismiss()
                     }
                     ?.addOnFailureListener { e ->

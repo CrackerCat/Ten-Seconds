@@ -3,12 +3,14 @@
 
     <string name="description_service_locker">The locker service provided by 10s for pasting the passwords securely.</string>
 
+    <string name="biometric_prompt_invalid">Sorry, your device doesn\'t support biometric authentication or you haven\'t enroll any biometrics yet.</string>
     <string name="biometric_prompt_title">Fingerprint Required</string>
     <string name="biometric_prompt_description">Please touch your finger on the fingerprint sensor to grant access to your master key.</string>
 
     <string name="button_ok">OK</string>
     <string name="button_cancel">Cancel</string>
 
+    <string name="prompt_require_google_play">Sorry, this application is based on Firebase, thus it requires Google Play service to work properly.</string>
     <string name="prompt_add_account">Press + to add new accounts.</string>
 
     <!-- Strings related to main activity -->

@@ -12,10 +12,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
-import com.gh0u1l5.tenseconds.frontend.adapters.IdentityAdapter
+import com.gh0u1l5.tenseconds.frontend.adapters.AccountAdapter.Companion.sAccountAdapters
+import com.gh0u1l5.tenseconds.frontend.adapters.IdentityAdapter.Companion.sIdentityAdapter
 import com.gh0u1l5.tenseconds.frontend.fragments.AddAccountDialogFragment
 import com.gh0u1l5.tenseconds.frontend.fragments.AddIdentityDialogFragment
 import com.gh0u1l5.tenseconds.frontend.fragments.VerifyIdentityDialogFragment
@@ -30,9 +32,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val mainHandler = Handler(Looper.getMainLooper())
 
-    private val identityAdapter = IdentityAdapter(LinkedHashMap())
-    private val identityLayoutManager = LinearLayoutManager(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,15 +44,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         identity_list.apply {
             setHasFixedSize(true)
-            adapter = identityAdapter
-            layoutManager = identityLayoutManager
+            adapter = sIdentityAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity)
         }
 
         nav_view.setNavigationItemSelectedListener(this)
 
         fab.setOnClickListener { _ ->
-            if (!BiometricUtils.hasValidBiometrics()) {
-                // TODO: handle this situation gracefully
+            if (!BiometricUtils.isBiometricsAvailable()) {
+                Toast.makeText(this, R.string.biometric_prompt_invalid, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val intent = Intent(this, MainActivity::class.java)
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         main_container.setOnRefreshListener {
-            identityAdapter.refreshData {
+            sIdentityAdapter.refresh {
                 main_container.isRefreshing = false
             }
         }
@@ -78,7 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return
         }
 
-        identityAdapter.refreshData {
+        sIdentityAdapter.refresh {
             main_loading.visibility = View.GONE
             main_container.visibility = View.VISIBLE
         }
@@ -119,8 +118,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (intent.action) {
             ACTION_ADD_IDENTITY -> {
                 AddIdentityDialogFragment().apply {
-                    addOnFinishedListener {
-                        identityAdapter.refreshData()
+                    addOnFinishedListener { identityId, identity ->
+                        sIdentityAdapter.add(identityId, identity)
                     }
                     show(supportFragmentManager, "AddIdentity")
                 }
@@ -129,8 +128,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 AddAccountDialogFragment().apply {
                     val identityId = intent.getStringExtra("identityId") ?: return
                     setIdentity(identityId)
-                    addOnFinishedListener {
-                        identityAdapter.accountAdapters[identityId]?.refreshData()
+                    addOnFinishedListener { accountId, account ->
+                        sAccountAdapters[identityId]?.add(accountId, account)
                     }
                     show(supportFragmentManager, "AddAccount")
                 }
@@ -140,7 +139,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val identityId = intent.getStringExtra("identityId") ?: return
                     setIdentity(identityId)
                     addOnFinishedListener {
-                        identityAdapter.notifyDataSetChanged() // TODO: does this work?
+                        sIdentityAdapter.notifyDataSetChanged()
                     }
                     show(supportFragmentManager, "VerifyIdentity")
                 }

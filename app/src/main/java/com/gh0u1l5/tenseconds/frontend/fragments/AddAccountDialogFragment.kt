@@ -16,7 +16,7 @@ class AddAccountDialogFragment : DialogFragment() {
 
     private var identityId: String = ""
 
-    private val onFinishedListeners: MutableList<() -> Unit> = mutableListOf()
+    private val onFinishedListeners = mutableListOf<(String, Account) -> Unit>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = activity!!.layoutInflater.inflate(R.layout.dialog_add_account, null)
@@ -38,7 +38,7 @@ class AddAccountDialogFragment : DialogFragment() {
         this.identityId = identityId
     }
 
-    fun addOnFinishedListener(onFinishedListener: () -> Unit) {
+    fun addOnFinishedListener(onFinishedListener: (String, Account) -> Unit) {
         onFinishedListeners.add(onFinishedListener)
     }
 
@@ -76,10 +76,12 @@ class AddAccountDialogFragment : DialogFragment() {
             focus?.requestFocus()
         } else {
             // TODO: add UI components for PasswordSpec
-            val address = "$username@$domain"
-            Store.AccountCollection.add(identityId, Account(address, PasswordSpec()))
+            val account = Account("$username@$domain", PasswordSpec())
+            Store.AccountCollection.add(identityId, account)
                     ?.addOnSuccessListener {
-                        onFinishedListeners.forEach { it.invoke() }
+                        onFinishedListeners.forEach { listener ->
+                            listener.invoke(it.id, account)
+                        }
                         dialog.dismiss()
                     }
                     ?.addOnFailureListener { e ->
