@@ -11,6 +11,7 @@
     <string name="button_cancel">Cancel</string>
 
     <string name="prompt_require_google_play">Sorry, this application is based on Firebase, thus it requires Google Play service to work properly.</string>
+    <string name="prompt_enable_locker_service">Please enable 10s as an accessibility service for securely paste the passwords.</string>
     <string name="prompt_add_account">Press + to add new accounts.</string>
 
     <!-- Strings related to main activity -->

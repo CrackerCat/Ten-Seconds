@@ -16,6 +16,7 @@ import android.widget.Toast
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
+import com.gh0u1l5.tenseconds.backend.services.ServiceUtils
 import com.gh0u1l5.tenseconds.frontend.adapters.AccountAdapter.Companion.sAccountAdapters
 import com.gh0u1l5.tenseconds.frontend.adapters.IdentityAdapter.Companion.sIdentityAdapter
 import com.gh0u1l5.tenseconds.frontend.fragments.AddAccountDialogFragment
@@ -70,6 +71,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onStart() {
         super.onStart()
+
+        if (!ServiceUtils.isLockerServiceEnabled(this)) {
+            ServiceUtils.activateLockerService(this)
+            return
+        }
 
         val user = Auth.instance.currentUser
         if (user == null) {
