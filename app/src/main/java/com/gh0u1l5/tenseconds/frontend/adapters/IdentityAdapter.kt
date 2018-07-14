@@ -15,6 +15,7 @@ import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Identity
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
+import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
 import com.gh0u1l5.tenseconds.frontend.activities.MainActivity
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_ACCOUNT
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_VERIFY_IDENTITY
@@ -64,7 +65,7 @@ class IdentityAdapter(
                 AlertDialog.Builder(parent.context)
                         .setTitle(R.string.title_dialog_delete_alert)
                         .setMessage(R.string.message_dialog_delete_alert)
-                        .setPositiveButton(R.string.button_ok) { _, _ ->
+                        .setPositiveButton(R.string.action_delete) { _, _ ->
                             val identityId = card.tag as? String
                             if (identityId != null) {
                                 Store.IdentityCollection.delete(identityId)
@@ -76,6 +77,11 @@ class IdentityAdapter(
                         }
                         .setNegativeButton(R.string.button_cancel) { dialog, _ ->
                             dialog.cancel()
+                        }
+                        .create().apply {
+                            setOnShowListener {
+                                setDefaultButtonStyle(parent.context)
+                            }
                         }
                         .show()
             }

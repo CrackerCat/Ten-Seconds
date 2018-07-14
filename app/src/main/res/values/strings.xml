@@ -50,5 +50,6 @@
 
     <!-- Strings related to delete alert dialog -->
     <string name="title_dialog_delete_alert">Warning</string>
+    <string name="action_delete">Delete</string>
     <string name="message_dialog_delete_alert">Warning! These data are not recoverable, continue?</string>
 </resources>

@@ -2,6 +2,7 @@ package com.gh0u1l5.tenseconds.frontend.fragments
 
 import android.app.Dialog
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.text.method.PasswordTransformationMethod
 import android.view.View
@@ -11,8 +12,9 @@ import android.widget.ProgressBar
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.getPassword
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
+import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
 
-class VerifyIdentityDialogFragment : BaseDialogFragment() {
+class VerifyIdentityDialogFragment : DialogFragment() {
 
     private var identityId: String = ""
 
@@ -31,7 +33,7 @@ class VerifyIdentityDialogFragment : BaseDialogFragment() {
                 .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
                 .create().apply {
                     setOnShowListener {
-                        setButtonColors(this)
+                        setDefaultButtonStyle(activity!!)
                         val positive = getButton(AlertDialog.BUTTON_POSITIVE)
                         positive.setOnClickListener { attemptAdd(this) }
                     }

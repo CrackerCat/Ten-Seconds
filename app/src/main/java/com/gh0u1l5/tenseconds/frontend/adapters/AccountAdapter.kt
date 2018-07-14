@@ -12,6 +12,7 @@ import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import com.gh0u1l5.tenseconds.backend.services.LockerService
+import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
 
 class AccountAdapter(
         val identityId: String,
@@ -59,7 +60,7 @@ class AccountAdapter(
                 AlertDialog.Builder(parent.context)
                         .setTitle(R.string.title_dialog_delete_alert)
                         .setMessage(R.string.message_dialog_delete_alert)
-                        .setPositiveButton(R.string.button_ok) { _, _ ->
+                        .setPositiveButton(R.string.action_delete) { _, _ ->
                             val accountId = line.tag as? String
                             if (accountId != null) {
                                 Store.AccountCollection.delete(identityId, accountId)
@@ -71,6 +72,11 @@ class AccountAdapter(
                         }
                         .setNegativeButton(R.string.button_cancel) { dialog, _ ->
                             dialog.cancel()
+                        }
+                        .create().apply {
+                            setOnShowListener {
+                                setDefaultButtonStyle(parent.context)
+                            }
                         }
                         .show()
             }
