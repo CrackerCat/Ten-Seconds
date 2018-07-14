@@ -61,9 +61,8 @@
             android:padding="4dp"
             card_view:srcCompat="@drawable/ic_lock" />
 
-        <ProgressBar
-            android:id="@+id/identity_card_loading"
-            style="?android:attr/progressBarStyle"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/identity_card_account_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

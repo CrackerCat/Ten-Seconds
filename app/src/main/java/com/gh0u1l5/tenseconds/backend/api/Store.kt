@@ -34,13 +34,13 @@ object Store {
                     ?.withFailureLog("FireStore")
         }
 
-        fun fetchAll(): Task<List<Pair<String, Identity>>>? {
+        fun fetchAll(): Task<LinkedHashMap<String, Identity>>? {
             return takeCollection()
                     ?.get()
                     ?.continueWith { task ->
-                        task.result.map { identity ->
+                        LinkedHashMap(task.result.associate { identity ->
                             identity.id to identity.toObject(Identity::class.java)
-                        }
+                        })
                     }
                     ?.withFailureLog("FireStore")
         }
@@ -58,6 +58,7 @@ object Store {
         }
 
         fun delete(identityId: String): Task<Void>? {
+            MasterKey.delete(identityId)
             return takeDocument(identityId)
                     ?.delete()
                     ?.withFailureLog("FireStore")
@@ -81,13 +82,13 @@ object Store {
                     ?.withFailureLog("FireStore")
         }
 
-        fun fetchAll(identityId: String): Task<List<Pair<String, Account>>>? {
+        fun fetchAll(identityId: String): Task<LinkedHashMap<String, Account>>? {
             return takeCollection(identityId)
                     ?.get()
                     ?.continueWith { task ->
-                        task.result.map { account ->
+                        LinkedHashMap(task.result.associate { account ->
                             account.id to account.toObject(Account::class.java)
-                        }
+                        })
                     }
                     ?.withFailureLog("FireStore")
         }

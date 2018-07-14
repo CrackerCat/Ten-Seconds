@@ -173,11 +173,18 @@ object MasterKey {
     }
 
     /**
+     * Delete the master key bounded to the specific identity.
+     */
+    fun delete(identityId: String) {
+        sAndroidKeyStore.deleteEntry("$identityId-master")
+    }
+
+    /**
      * Deletes all the master keys that are no longer used.
      *
      * @param identityIds The list of alive identities.
      */
-    fun cleanup(identityIds: List<String>) {
+    fun cleanup(identityIds: Set<String>) {
         thread(start = true) {
             sAndroidKeyStore.aliases().iterator().forEach { alias ->
                 val identityId = alias.removeSuffix("-master")
