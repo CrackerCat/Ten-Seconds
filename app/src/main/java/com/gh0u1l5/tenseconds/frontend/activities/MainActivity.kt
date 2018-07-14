@@ -16,7 +16,10 @@ import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
 import com.gh0u1l5.tenseconds.frontend.adapters.IdentityAdapter
+import com.gh0u1l5.tenseconds.frontend.fragments.AddAccountDialogFragment
 import com.gh0u1l5.tenseconds.frontend.fragments.AddIdentityDialogFragment
+import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_ACCOUNT
+import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_IDENTITY
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -25,8 +28,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val mainHandler = Handler(Looper.getMainLooper())
 
-    private val identityListAdapter = IdentityAdapter(emptyList())
-    private val identityListLayoutManager = LinearLayoutManager(this)
+    private val identityAdapter = IdentityAdapter(LinkedHashMap())
+    private val identityLayoutManager = LinearLayoutManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +43,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         identity_list.apply {
             setHasFixedSize(true)
-            adapter = identityListAdapter
-            layoutManager = identityListLayoutManager
+            adapter = identityAdapter
+            layoutManager = identityLayoutManager
         }
 
         nav_view.setNavigationItemSelectedListener(this)
@@ -51,16 +54,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // TODO: handle this situation gracefully
                 return@setOnClickListener
             }
-            AddIdentityDialogFragment().apply {
-                addOnFinishedListener {
-                    identityListAdapter.refreshData()
-                }
-                show(supportFragmentManager, "AddIdentity")
-            }
+            startActivity(Intent(this, MainActivity::class.java).apply {
+                action = ACTION_ADD_IDENTITY
+            })
         }
 
         main_container.setOnRefreshListener {
-            identityListAdapter.refreshData {
+            identityAdapter.refreshData {
                 main_container.isRefreshing = false
             }
         }
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return
         }
 
-        identityListAdapter.refreshData {
+        identityAdapter.refreshData {
             main_loading.visibility = View.GONE
             main_container.visibility = View.VISIBLE
         }
@@ -110,5 +110,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         drawer_layout.closeDrawer(GravityCompat.START)
         return false
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        when (intent.action) {
+            ACTION_ADD_IDENTITY -> {
+                AddIdentityDialogFragment().apply {
+                    addOnFinishedListener {
+                        identityAdapter.refreshData()
+                    }
+                    show(supportFragmentManager, "AddIdentity")
+                }
+            }
+            ACTION_ADD_ACCOUNT -> {
+                AddAccountDialogFragment().apply {
+                    val identityId = intent.getStringExtra("identityId") ?: return
+                    setIdentity(identityId)
+                    addOnFinishedListener {
+                        identityAdapter.accountAdapters[identityId]?.refreshData()
+                    }
+                    show(supportFragmentManager, "AddAccount")
+                }
+            }
+        }
     }
 }
