@@ -70,7 +70,7 @@ class AccountAdapter(
         when {
             data == null -> { // Loading
                 val context = holder.line.context
-                val background = context.getDrawable(R.drawable.input_background_light_blue)
+                val background = context.getDrawable(R.drawable.background_light_blue)
                 holder.address.text = ""
                 holder.address.background = background
             }

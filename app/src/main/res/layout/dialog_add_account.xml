@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/dialog_background_white"
+    android:background="@drawable/background_white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -22,7 +22,7 @@
                 android:id="@+id/account_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/input_background_light_blue"
+                android:background="@drawable/background_light_blue"
                 android:hint="@string/prompt_username"
                 android:maxLines="1"
                 android:singleLine="true"
@@ -41,7 +41,7 @@
                 android:id="@+id/account_domain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/input_background_light_blue"
+                android:background="@drawable/background_light_blue"
                 android:hint="@string/prompt_domain"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_add_account"
