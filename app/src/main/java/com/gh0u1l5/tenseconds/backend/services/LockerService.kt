@@ -22,7 +22,7 @@ class LockerService : AccessibilityService() {
 
         @Volatile private var password: CharArray? = null
 
-        fun activate(password: CharArray) {
+        fun notify(password: CharArray) {
             cleaner.run()
             handler.removeCallbacks(cleaner)
             this.password = password

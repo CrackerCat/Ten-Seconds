@@ -50,10 +50,15 @@ object MasterKey {
      * Calculate the salted hash of a master key as SHA256(identityId + rawKey).
      *
      * @param identityId The identityId bounded to this master key
-     * @param rawKey The raw master key stored in a ByteArray
+     * @param rawKey The raw master key stored in a ByteArray. Note that after this operation, this
+     * array will be erased immediately.
      */
     private fun hash(identityId: String, rawKey: ByteArray): ByteArray {
-        return digestWithSHA256(identityId.toByteArray(), rawKey)
+        try {
+            return digestWithSHA256(identityId.toByteArray(), rawKey)
+        } finally {
+            rawKey.erase()
+        }
     }
 
     /**

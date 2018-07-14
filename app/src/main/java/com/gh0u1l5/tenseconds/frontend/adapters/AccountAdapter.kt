@@ -66,7 +66,7 @@ class AccountAdapter(
                 if (accountId != null && account != null) {
                     val context = parent.context
                     MasterKey.process(context, identityId, accountId, account) {
-                        LockerService.activate(password = it)
+                        LockerService.notify(password = it)
                     }
                 }
                 return@setOnLongClickListener true
