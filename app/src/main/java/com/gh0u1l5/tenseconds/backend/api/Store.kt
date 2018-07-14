@@ -3,6 +3,7 @@ package com.gh0u1l5.tenseconds.backend.api
 import com.gh0u1l5.tenseconds.backend.api.TaskDecorators.withFailureLog
 import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.bean.Identity
+import com.gh0u1l5.tenseconds.backend.bean.OAuthInfo
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
@@ -14,6 +15,28 @@ object Store {
             firestoreSettings = FirebaseFirestoreSettings.Builder()
                     .setTimestampsInSnapshotsEnabled(true)
                     .build()
+        }
+    }
+
+    object OAuthCollection {
+        private fun takeCollection(): CollectionReference? {
+            return instance.collection("oauth/")
+        }
+
+        private fun Auth.OAuthType.toDocumentId(): String {
+            return when (this) {
+                Auth.OAuthType.Facebook -> "Facebook"
+                Auth.OAuthType.GitHub   -> "GitHub"
+                Auth.OAuthType.Google   -> "Google"
+                Auth.OAuthType.Twitter  -> "Twitter"
+            }
+        }
+
+        fun fetch(type: Auth.OAuthType): Task<OAuthInfo>? {
+            return takeCollection()?.document(type.toDocumentId())
+                    ?.get()
+                    ?.continueWith { it.result.toObject(OAuthInfo::class.java)!! }
+                    ?.withFailureLog("FireStore")
         }
     }
 
