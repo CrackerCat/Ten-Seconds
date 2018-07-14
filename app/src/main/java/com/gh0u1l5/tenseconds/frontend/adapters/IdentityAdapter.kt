@@ -20,7 +20,6 @@ import com.gh0u1l5.tenseconds.frontend.activities.MainActivity
 import com.gh0u1l5.tenseconds.frontend.adapters.AccountAdapter.Companion.sAccountAdapters
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_ACCOUNT
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_VERIFY_IDENTITY
-import java.util.concurrent.ConcurrentHashMap
 
 class IdentityAdapter(
         private var data: LinkedHashMap<String, Identity>
@@ -128,7 +127,7 @@ class IdentityAdapter(
     }
 
     private fun tryDeployAccountAdapter(holder: ViewHolder, identityId: String) {
-        if (identityId !in sAccountAdapters) {
+        if (sAccountAdapters[identityId] == null) {
             sAccountAdapters[identityId] = AccountAdapter(identityId)
         }
         val adapter = holder.list.adapter as? AccountAdapter
