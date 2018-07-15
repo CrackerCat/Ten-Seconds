@@ -30,7 +30,7 @@ class AddIdentityDialogFragment : DialogFragment() {
                 .setView(view)
                 .setTitle(R.string.title_dialog_add_identity)
                 .setPositiveButton(R.string.action_add_identity, null)
-                .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
+                .setNegativeButton(R.string.action_cancel) { dialog, _ -> dialog.cancel() }
                 .create().apply {
                     setOnShowListener {
                         setDefaultButtonStyle(activity!!)
@@ -100,7 +100,7 @@ class AddIdentityDialogFragment : DialogFragment() {
         }
     }
 
-    private fun isPassphraseValid(passphrase: CharArray) = passphrase.size > 4
+    private fun isPassphraseValid(passphrase: CharArray) = passphrase.size > 8
 
     private fun showProgress(dialog: AlertDialog, show: Boolean) {
         // The ViewPropertyAnimator APIs are not available, so simply show

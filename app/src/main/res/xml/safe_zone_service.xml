@@ -1,5 +1,5 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:description="@string/description_service_locker"
+    android:description="@string/description_safe_zone_service"
     android:accessibilityEventTypes="typeAllMask"
     android:accessibilityFlags="flagDefault"
     android:accessibilityFeedbackType="feedbackGeneric"

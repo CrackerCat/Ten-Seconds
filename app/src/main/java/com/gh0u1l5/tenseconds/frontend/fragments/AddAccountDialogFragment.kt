@@ -24,7 +24,7 @@ class AddAccountDialogFragment : DialogFragment() {
                 .setView(view)
                 .setTitle(R.string.title_dialog_add_account)
                 .setPositiveButton(R.string.action_add_account, null)
-                .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
+                .setNegativeButton(R.string.action_cancel) { dialog, _ -> dialog.cancel() }
                 .create().apply {
                     setOnShowListener {
                         setDefaultButtonStyle(activity!!)

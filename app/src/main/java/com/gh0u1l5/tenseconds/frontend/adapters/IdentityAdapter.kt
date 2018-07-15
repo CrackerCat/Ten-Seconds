@@ -86,7 +86,7 @@ class IdentityAdapter(
                                         }
                             }
                         }
-                        .setNegativeButton(R.string.button_cancel) { dialog, _ ->
+                        .setNegativeButton(R.string.action_cancel) { dialog, _ ->
                             dialog.cancel()
                         }
                         .create().apply {

@@ -31,11 +31,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <service
             android:name=".backend.services.LockerService"
+            android:label="@string/title_safe_zone_service"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
-            <meta-data android:name="android.accessibilityservice" android:resource="@xml/locker_service" />
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/safe_zone_service" />
         </service>
     </application>
 

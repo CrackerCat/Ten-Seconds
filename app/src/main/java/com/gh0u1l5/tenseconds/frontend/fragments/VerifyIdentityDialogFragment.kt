@@ -30,7 +30,7 @@ class VerifyIdentityDialogFragment : DialogFragment() {
                 .setView(view)
                 .setTitle(R.string.title_dialog_verify_identity)
                 .setPositiveButton(R.string.action_verify_identity, null)
-                .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
+                .setNegativeButton(R.string.action_cancel) { dialog, _ -> dialog.cancel() }
                 .create().apply {
                     setOnShowListener {
                         setDefaultButtonStyle(activity!!)

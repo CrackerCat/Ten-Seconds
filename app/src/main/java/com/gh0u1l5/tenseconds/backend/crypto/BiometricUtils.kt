@@ -61,7 +61,7 @@ object BiometricUtils {
     }
 
     fun authenticate(context: Context, cipher: Cipher, callback: AuthenticationCallback) {
-        val cancel = context.getString(R.string.button_cancel)
+        val cancel = context.getString(R.string.action_cancel)
         val cancelSignal = CancellationSignal()
         if (Build.VERSION.SDK_INT >= 28) {
             val crypto = BiometricPrompt.CryptoObject(cipher)

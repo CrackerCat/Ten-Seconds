@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">10秒</string>
+
+    <string name="biometric_prompt_invalid">
+        抱歉，您的设备不支持生物验证或还没有录入生物验证凭证（如指纹等），请确认后重试
+    </string>
+    <string name="biometric_prompt_title">
+        指纹验证
+    </string>
+    <string name="biometric_prompt_description">
+        请将您的手指放在指纹传感器上，以授权对TrustZone内主密钥的访问。
+    </string>
+
+    <string name="action_confirm">确认</string>
+    <string name="action_cancel">取消</string>
+
+    <string name="prompt_add_account">
+        请按+添加第一个账户
+    </string>
+    <string name="prompt_require_google_play">
+        抱歉，本应用目前通过Firebase保护您的云侧数据安全，请在安装Google Play框架后重试。
+    </string>
+
+    <!-- Strings related to main activity -->
+    <string name="title_activity_main">10秒</string>
+    <string name="navigation_drawer_open">开启边侧抽屉</string>
+    <string name="navigation_drawer_close">关闭边侧抽屉</string>
+    <string name="nav_header_avatar">用户头像</string>
+    <string name="nav_header_nickname">无名氏</string>
+    <string name="nav_header_email">unknown@somewhere.com</string>
+    <string name="nav_title_exit">退出</string>
+
+    <!-- Strings related to login activity -->
+    <string name="title_activity_login">登录</string>
+    <string name="action_sign_in">登录</string>
+    <string name="prompt_email">邮箱</string>
+    <string name="prompt_password">密码</string>
+    <string name="error_field_required">此处为必填项</string>
+    <string name="error_invalid_email">请输入有效的邮箱地址</string>
+    <string name="error_invalid_password">请输入4位以上的密码</string>
+    <string name="error_login_failed">用户不存在或密码错误</string>
+
+    <!-- Strings related to SafeZone service -->
+    <string name="title_safe_zone_service">10秒安定区</string>
+    <string name="description_safe_zone_service">
+        开启“10秒安定区”服务后，用户可以通过该服务将“10秒”中生成的密码安全地粘贴到其他应用中，以免由于使用不安全的系统粘贴板泄露敏感信息。\n
+        \n
+        要粘贴“10秒”生成的密码，请执行以下操作：\n
+        - 长按需要粘贴密码的文本框\n
+        - 每个密码生成后只会在内存中存活10秒，哎你慌什么(\'・ω・\')
+    </string>
+    <string name="prompt_enable_safe_zone_service">
+        请启用“10秒安定区”服务以安全使用您的密码
+    </string>
+
+    <!-- Strings related to add identity dialog -->
+    <string name="title_dialog_add_identity">添加身份</string>
+    <string name="action_add_identity">添加</string>
+    <string name="prompt_nickname">别称</string>
+    <string name="prompt_passphrase">密钥</string>
+    <string name="error_invalid_passphrase">请输入8位以上的密钥</string>
+
+    <!-- Strings related to add account dialog -->
+    <string name="title_dialog_add_account">添加账户</string>
+    <string name="action_add_account">添加</string>
+    <string name="prompt_username">用户名</string>
+    <string name="prompt_domain">域名</string>
+
+    <!-- Strings related to verify identity dialog -->
+    <string name="title_dialog_verify_identity">验证身份</string>
+    <string name="action_verify_identity">验证</string>
+    <string name="error_verify_failed">密钥不符</string>
+
+    <!-- Strings related to delete alert dialog -->
+    <string name="title_dialog_delete_alert">警告</string>
+    <string name="action_delete">删除</string>
+    <string name="message_dialog_delete_alert">警告！已删除的密码不可恢复，确认继续？</string>
+</resources>

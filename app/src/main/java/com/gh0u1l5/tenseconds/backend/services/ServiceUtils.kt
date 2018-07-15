@@ -21,6 +21,6 @@ object ServiceUtils {
 
     fun activateLockerService(context: Context) {
         context.startActivity(Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS))
-        Toast.makeText(context, R.string.prompt_enable_locker_service, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, R.string.prompt_enable_safe_zone_service, Toast.LENGTH_LONG).show()
     }
 }
