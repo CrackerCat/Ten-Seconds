@@ -8,19 +8,16 @@ import android.util.Log
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoObjects.sAndroidKeyStore
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.deriveKeyWithPBKDF2
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.digestWithSHA256
 import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
 import com.gh0u1l5.tenseconds.backend.crypto.EraseUtils.erase
 import com.gh0u1l5.tenseconds.global.CharType.fromCharTypesToCharArray
-import com.gh0u1l5.tenseconds.global.Constants.PBKDF2_ITERATIONS
 import com.google.android.gms.tasks.Task
 import java.security.KeyStore
 import java.security.KeyStoreException
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 import kotlin.concurrent.thread
 
@@ -30,12 +27,6 @@ import kotlin.concurrent.thread
  * immediately.
  */
 object MasterKey {
-    init {
-        System.loadLibrary("crypto-engine")
-    }
-
-    class DeriveException: Exception()
-
     /**
      * The protection rules specified for the imported AES-256 master keys.
      */
@@ -66,15 +57,16 @@ object MasterKey {
     }
 
     /**
-     * Derives an AES-256 master key from a passphrase using PBKDF2.
+     * Derives an AES-256 master key from a passphrase using scrypt.
      *
      * @param identityId The identityId bounded to this master key, which will be used as the salt
-     * value in PBKDF2.
+     * value in scrypt.
      * @param passphrase The passphrase used to derive the AES-256 key. Notice that after this
      * operation, this passphrase will be erased immediately.
      */
-    @Throws(DeriveException::class)
-    private external fun derive(identityId: String, passphrase: CharArray): ByteArray
+    private fun derive(identityId: String, passphrase: CharArray): ByteArray {
+        return CryptoUtils.scrypt(passphrase, identityId.toByteArray())
+    }
 
     /**
      * Stores a AES-256 master key to both local and remote locations.

@@ -12,49 +12,49 @@
 #define KEY_LENGTH 32
 
 JNIEXPORT jbyteArray JNICALL
-Java_com_gh0u1l5_tenseconds_backend_crypto_MasterKey_derive(
+Java_com_gh0u1l5_tenseconds_backend_crypto_CryptoUtils_scrypt(
         JNIEnv* env,
         jobject obj,
-        jstring identity,
-        jcharArray passphrase
+        jcharArray passphrase,
+        jbyteArray salt
 ) {
-    // Read identity ID
-    jsize identity_len = (*env)->GetStringLength(env, identity);
-    const char *identity_data = (*env)->GetStringUTFChars(env, identity, JNI_FALSE);
-
     // Read passphrase
     jsize passphrase_len = (*env)->GetArrayLength(env, passphrase);
     jchar *passphrase_data = (*env)->GetCharArrayElements(env, passphrase, JNI_FALSE);
 
-    // Convert identity ID to salt
-    size_t salt_len = identity_len * sizeof(char);
-    uint8_t salt_data[salt_len];
-    memcpy(salt_data, identity_data, salt_len);
+    // Read salt
+    jsize salt_len = (*env)->GetArrayLength(env, salt);
+    jbyte *salt_data = (*env)->GetByteArrayElements(env, salt, JNI_FALSE);
 
-    // Convert passphrase to password
-    size_t password_len = passphrase_len * sizeof(jchar);
-    uint8_t password_data[password_len];
-    memcpy(password_data, passphrase_data, password_len);
+    // Copy passphrase to uint8_t array
+    size_t passphrase_size = passphrase_len * sizeof(jchar);
+    uint8_t passphrase_buffer[passphrase_size];
+    memcpy(passphrase_buffer, passphrase_data, passphrase_size);
+
+    // Copy salt to uint8_t array
+    size_t salt_size = salt_len * sizeof(jbyte);
+    uint8_t salt_buffer[salt_size];
+    memcpy(salt_buffer, salt_data, salt_size);
 
     // Derive key with scrypt algorithm
-    uint8_t buffer[KEY_LENGTH];
+    uint8_t key_buffer[KEY_LENGTH];
     int result = crypto_scrypt(
-            password_data, password_len,
-            salt_data, salt_len,
+            passphrase_buffer, passphrase_size,
+            salt_buffer, salt_size,
             SCRYPT_N, SCRYPT_R, SCRYPT_P,
-            buffer, KEY_LENGTH
+            key_buffer, KEY_LENGTH
     );
     jbyteArray key = (*env)->NewByteArray(env, KEY_LENGTH);
-    (*env)->SetByteArrayRegion(env, key, 0, KEY_LENGTH, (jbyte*)buffer);
+    (*env)->SetByteArrayRegion(env, key, 0, KEY_LENGTH, (jbyte*)key_buffer);
 
     // Erase sensitive data
-    memset(buffer, 0, KEY_LENGTH);
-    memset(salt_data, 0, salt_len);
-    memset(password_data, 0, password_len);
-    memset(passphrase_data, 0, passphrase_len * sizeof(jchar));
+    memset(key_buffer, 0, KEY_LENGTH);
+    memset(salt_buffer, 0, salt_size);
+    memset(passphrase_buffer, 0, passphrase_size);
+    memset(passphrase_data, 0, passphrase_size);
 
     // Free memory
-    (*env)->ReleaseStringUTFChars(env, identity, identity_data);
+    (*env)->ReleaseByteArrayElements(env, salt, salt_data, JNI_ABORT);
     (*env)->ReleaseCharArrayElements(env, passphrase, passphrase_data, JNI_ABORT);
 
     // Return a result or throw an exception

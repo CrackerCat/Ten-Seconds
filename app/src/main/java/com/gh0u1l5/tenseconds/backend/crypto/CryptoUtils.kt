@@ -2,31 +2,13 @@ package com.gh0u1l5.tenseconds.backend.crypto
 
 import android.widget.EditText
 import java.security.MessageDigest
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.PBEKeySpec
 
 object CryptoUtils {
-    /**
-     * A [SecretKeyFactory] which can derive a key from a passphrase using PBKDF2WithHmacSHA1.
-     * @hide
-     */
-    private val sPBEKeyFactory by lazy {
-        SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+    init {
+        System.loadLibrary("crypto-engine")
     }
 
-    /**
-     * Derives a key based on the given specification using PBKDF2WithHmacSHA1.
-     *
-     * @param keySpec The specification that includes passphrase, salt, iteration number and key
-     * length. Notice that this [PBEKeySpec] object will be erased immediately after the operation.
-     */
-    fun deriveKeyWithPBKDF2(keySpec: PBEKeySpec): ByteArray {
-        try {
-            return sPBEKeyFactory.generateSecret(keySpec).encoded
-        } finally {
-            keySpec.clearPassword()
-        }
-    }
+    class ScryptException: Exception()
 
     /**
      * A [MessageDigest] object which can generate SHA-256 digests safely.
@@ -50,6 +32,15 @@ object CryptoUtils {
         }
     }
 
+    /**
+     * TODO: add document
+     */
+    @Throws(ScryptException::class)
+    external fun scrypt(password: CharArray, salt: ByteArray): ByteArray
+
+    /**
+     * Read a CharArray from EditText directly.
+     */
     fun EditText.getPassword(): CharArray {
         return CharArray(text.length).also {
             text.getChars(0, text.length, it, 0)
