@@ -30,6 +30,15 @@ import kotlin.concurrent.thread
  * immediately.
  */
 object MasterKey {
+    init {
+        System.loadLibrary("crypto-engine")
+    }
+
+    class DeriveException: Exception()
+
+    /**
+     * The protection rules specified for the imported AES-256 master keys.
+     */
     private val sMasterKeyProtection by lazy {
         KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT).run {
             setRandomizedEncryptionRequired(false)
@@ -50,15 +59,10 @@ object MasterKey {
      * Calculate the salted hash of a master key as SHA256(identityId + rawKey).
      *
      * @param identityId The identityId bounded to this master key
-     * @param rawKey The raw master key stored in a ByteArray. Note that after this operation, this
-     * array will be erased immediately.
+     * @param rawKey The raw master key stored in a ByteArray.
      */
     private fun hash(identityId: String, rawKey: ByteArray): ByteArray {
-        try {
-            return digestWithSHA256(identityId.toByteArray(), rawKey)
-        } finally {
-            rawKey.erase()
-        }
+        return digestWithSHA256(identityId.toByteArray(), rawKey)
     }
 
     /**
@@ -69,39 +73,30 @@ object MasterKey {
      * @param passphrase The passphrase used to derive the AES-256 key. Notice that after this
      * operation, this passphrase will be erased immediately.
      */
-    private fun derive(identityId: String, passphrase: CharArray): SecretKey {
-        // TODO: change PBKDF2 to scrypt as soon as possible
-        var keyBuffer: ByteArray? = null
-        try {
-            val salt = identityId.toByteArray()
-            val spec = PBEKeySpec(passphrase, salt, PBKDF2_ITERATIONS, 32 * 8)
-            keyBuffer = deriveKeyWithPBKDF2(spec)
-            return SecretKeySpec(keyBuffer, "AES")
-        } finally {
-            keyBuffer?.erase()
-            passphrase.erase()
-        }
-    }
+    @Throws(DeriveException::class)
+    private external fun derive(identityId: String, passphrase: CharArray): ByteArray
 
     /**
      * Stores a AES-256 master key to both local and remote locations.
      *
      * @param identityId The identityId bounded to this master key
-     * @param key The AES-256 master key to be stored. Notice that after this operation, this key
+     * @param rawKey The AES-256 master key to be stored. Notice that after this operation, this key
      * will be erased immediately.
      */
-    private fun store(identityId: String, key: SecretKey) {
+    private fun store(identityId: String, rawKey: ByteArray) {
+        val key = SecretKeySpec(rawKey, "AES")
         try {
             // Update local storage
             val entry = KeyStore.SecretKeyEntry(key)
             sAndroidKeyStore.setEntry("$identityId-master", entry, sMasterKeyProtection)
             // Update remote storage
-            val data = mapOf("master" to hash(identityId, key.encoded).fromBytesToHexString())
+            val data = mapOf("master" to hash(identityId, rawKey).fromBytesToHexString())
             Store.IdentityCollection.update(identityId, data)
         } catch (e: KeyStoreException) {
             Log.w(javaClass.simpleName, e)
         } finally {
-            (key as SecretKeySpec).erase()
+            rawKey.erase()
+            key.erase()
         }
     }
 
@@ -128,7 +123,7 @@ object MasterKey {
      */
     fun verify(identityId: String, passphrase: CharArray): Task<Boolean>? {
         val key = derive(identityId, passphrase)
-        val hash = hash(identityId, key.encoded).fromBytesToHexString()
+        val hash = hash(identityId, key).fromBytesToHexString()
         return Store.IdentityCollection.fetch(identityId)
                 ?.continueWith { it.result.master == hash }
                 ?.addOnSuccessListener { match ->

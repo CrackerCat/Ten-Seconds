@@ -16,6 +16,9 @@ import javax.crypto.spec.IvParameterSpec
  */
 @Deprecated("The master keys can be imported into Android KeyStore directly.")
 object RootKey {
+    /**
+     * The generator used to create a new AES-256 root key in Android KeyStore.
+     */
     private val sRootKeyGenerator by lazy {
         KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore").apply {
             val purpose = KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT

@@ -10,6 +10,11 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0.0"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++14"
+            }
+        }
     }
     buildTypes {
         release {
@@ -17,9 +22,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+    sourceSets {
+        main {
+            jniLibs.srcDirs 'src/main/cpp/openssl/'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
     }
 }
 
