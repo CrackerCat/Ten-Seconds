@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#0d47a1</color>
     <color name="colorAccent">#82b1ff</color>
 
+    <color name="colorAccountLinePressed">#d2dce9ff</color>
     <color name="colorActionBarTitleLight">#ffffff</color>
     <color name="colorFloatingActionButton">#e3f2fd</color>
 

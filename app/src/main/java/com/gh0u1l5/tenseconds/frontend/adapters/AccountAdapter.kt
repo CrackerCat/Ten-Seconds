@@ -111,10 +111,12 @@ class AccountAdapter(
                 holder.address.background = null
             }
             else -> { // Regular Situation
+                val context = holder.line.context
+                val background = context.getDrawable(R.drawable.account_line_background)
                 val entry = ArrayList(data!!.entries)[position]
                 holder.line.tag = entry.key
                 holder.address.text = entry.value.address
-                holder.address.background = null
+                holder.address.background = background
             }
         }
     }
