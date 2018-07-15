@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.view.View
+import android.widget.CheckBox
 import android.widget.EditText
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.bean.PasswordSpec
 import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
+import com.gh0u1l5.tenseconds.global.CharType
 
 class AddAccountDialogFragment : DialogFragment() {
 
@@ -42,9 +44,32 @@ class AddAccountDialogFragment : DialogFragment() {
         onFinishedListeners.add(onFinishedListener)
     }
 
+    private fun getCharType(numbers: CheckBox, symbols: CheckBox, lower: CheckBox, upper: CheckBox): Int {
+        var type = 0
+        if (numbers.isChecked) {
+            type = type or CharType.NUMBERS
+        }
+        if (symbols.isChecked) {
+            type = type or CharType.SYMBOLS
+        }
+        if (lower.isChecked) {
+            type = type or CharType.LOWER_LETTERS
+        }
+        if (upper.isChecked) {
+            type = type or CharType.UPPER_LETTERS
+        }
+        return type
+    }
+
     private fun attemptAdd(dialog: AlertDialog) {
         val usernameView = dialog.findViewById<EditText>(R.id.account_username) ?: return
         val domainView = dialog.findViewById<EditText>(R.id.account_domain) ?: return
+        val lengthView = dialog.findViewById<EditText>(R.id.account_password_length) ?: return
+
+        val numbers = dialog.findViewById<CheckBox>(R.id.account_char_type_numbers) ?: return
+        val symbols = dialog.findViewById<CheckBox>(R.id.account_char_type_symbols) ?: return
+        val lower = dialog.findViewById<CheckBox>(R.id.account_char_type_lower_letters) ?: return
+        val upper = dialog.findViewById<CheckBox>(R.id.account_char_type_upper_letters) ?: return
 
         // Reset errors.
         usernameView.error = null
@@ -53,6 +78,7 @@ class AddAccountDialogFragment : DialogFragment() {
         // Store values at the time of the add attempt.
         val username = usernameView.text.toString()
         val domain = domainView.text.toString()
+        val length = lengthView.text.toString()
 
         // Check for a valid nickname / passphrase.
         var cancel = false
@@ -68,6 +94,11 @@ class AddAccountDialogFragment : DialogFragment() {
                 focus = domainView
                 cancel = true
             }
+            length.isEmpty() -> {
+                lengthView.error = getString(R.string.error_field_required)
+                focus = lengthView
+                cancel = true
+            }
         }
 
         if (cancel) {
@@ -75,8 +106,8 @@ class AddAccountDialogFragment : DialogFragment() {
             // form field with an error.
             focus?.requestFocus()
         } else {
-            // TODO: add UI components for PasswordSpec
-            val account = Account("$username@$domain", PasswordSpec())
+            val spec = PasswordSpec(length.toInt(), getCharType(numbers, symbols, lower, upper))
+            val account = Account("$username@$domain", spec)
             Store.AccountCollection.add(identityId, account)
                     ?.addOnSuccessListener {
                         onFinishedListeners.forEach { listener ->

@@ -65,6 +65,12 @@
     <string name="action_add_account">Add</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_domain">Domain</string>
+    <string name="prompt_password_length">Password Length</string>
+    <string name="subtitle_character_types">Character Types</string>
+    <string name="char_type_numbers">Numbers</string>
+    <string name="char_type_symbols">Symbols</string>
+    <string name="char_type_lower_letters">Lower Letters</string>
+    <string name="char_type_upper_letters">Upper Letters</string>
 
     <!-- Strings related to verify identity dialog -->
     <string name="title_dialog_verify_identity">Verify Identity</string>

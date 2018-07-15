@@ -65,6 +65,12 @@
     <string name="action_add_account">添加</string>
     <string name="prompt_username">用户名</string>
     <string name="prompt_domain">域名</string>
+    <string name="prompt_password_length">密码长度</string>
+    <string name="subtitle_character_types">字符类型</string>
+    <string name="char_type_numbers">数字</string>
+    <string name="char_type_symbols">符号</string>
+    <string name="char_type_lower_letters">小写字母</string>
+    <string name="char_type_upper_letters">大写字母</string>
 
     <!-- Strings related to verify identity dialog -->
     <string name="title_dialog_verify_identity">验证身份</string>
