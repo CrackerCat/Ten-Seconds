@@ -33,7 +33,7 @@ object CryptoUtils {
     }
 
     /**
-     * TODO: add document
+     * Derives a 256-bit key using scrypt algorithm, with arguments N = 32768, r = 8, p = 1
      */
     @Throws(ScryptException::class)
     external fun scrypt(password: CharArray, salt: ByteArray): ByteArray

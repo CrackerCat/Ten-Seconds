@@ -4,7 +4,7 @@ jdk: oraclejdk8
 env:
   global:
     - BUILD_API=android-28
-    - BUILD_TOOLS=build-tools-28.0.1
+    - BUILD_TOOLS=build-tools-27.0.3
 
 android:
   components:
@@ -24,6 +24,15 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
+
+before_install:
+  - echo y | sdkmanager "ndk-bundle"
+  - echo y | sdkmanager "cmake;3.6.4111459"
+  - echo y | sdkmanager "lldb;3.1"
+  - openssl aes-256-cbc -K $encrypted_6597f3e54d09_key -iv $encrypted_6597f3e54d09_iv -in google-services.json.enc -out app/google-services.json -d
+
+before_script:
+  - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
 
 script:
   - ./gradlew build check
