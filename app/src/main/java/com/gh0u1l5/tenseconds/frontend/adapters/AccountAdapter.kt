@@ -11,7 +11,7 @@ import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Account
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
-import com.gh0u1l5.tenseconds.backend.services.LockerService
+import com.gh0u1l5.tenseconds.backend.services.SafeZoneService
 import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
 import java.util.concurrent.ConcurrentHashMap
 
@@ -66,7 +66,7 @@ class AccountAdapter(
                 if (accountId != null && account != null) {
                     val context = parent.context
                     MasterKey.process(context, identityId, accountId, account) {
-                        LockerService.notify(password = it)
+                        SafeZoneService.notify(password = it)
                     }
                 }
                 return@setOnLongClickListener true

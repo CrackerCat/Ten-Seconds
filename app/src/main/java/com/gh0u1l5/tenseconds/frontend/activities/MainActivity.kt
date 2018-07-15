@@ -72,8 +72,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onStart() {
         super.onStart()
 
-        if (!ServiceUtils.isLockerServiceEnabled(this)) {
-            ServiceUtils.activateLockerService(this)
+        if (!ServiceUtils.isSafeZoneServiceEnabled(this)) {
+            ServiceUtils.activateSafeZoneService(this)
             return
         }
 

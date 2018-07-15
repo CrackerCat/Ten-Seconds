@@ -30,7 +30,7 @@
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <service
-            android:name=".backend.services.LockerService"
+            android:name=".backend.services.SafeZoneService"
             android:label="@string/title_safe_zone_service"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>

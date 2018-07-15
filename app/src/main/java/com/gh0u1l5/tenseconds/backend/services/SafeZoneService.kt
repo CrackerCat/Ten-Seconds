@@ -13,7 +13,7 @@ import com.gh0u1l5.tenseconds.backend.crypto.EraseUtils.erase
 import com.gh0u1l5.tenseconds.global.Constants.PASSWORD_SURVIVE_INTERVAL
 import java.nio.CharBuffer
 
-class LockerService : AccessibilityService() {
+class SafeZoneService : AccessibilityService() {
     companion object {
         private val cleaner = Runnable {
             password?.apply { password = null; erase() }
