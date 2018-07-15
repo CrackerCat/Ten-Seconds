@@ -71,6 +71,7 @@
     <string name="char_type_symbols">符号</string>
     <string name="char_type_lower_letters">小写字母</string>
     <string name="char_type_upper_letters">大写字母</string>
+    <string name="error_invalid_password_length">请输入一个1至32之间的整数</string>
 
     <!-- Strings related to verify identity dialog -->
     <string name="title_dialog_verify_identity">验证身份</string>

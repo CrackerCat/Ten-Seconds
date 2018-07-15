@@ -44,23 +44,6 @@ class AddAccountDialogFragment : DialogFragment() {
         onFinishedListeners.add(onFinishedListener)
     }
 
-    private fun getCharType(numbers: CheckBox, symbols: CheckBox, lower: CheckBox, upper: CheckBox): Int {
-        var type = 0
-        if (numbers.isChecked) {
-            type = type or CharType.NUMBERS
-        }
-        if (symbols.isChecked) {
-            type = type or CharType.SYMBOLS
-        }
-        if (lower.isChecked) {
-            type = type or CharType.LOWER_LETTERS
-        }
-        if (upper.isChecked) {
-            type = type or CharType.UPPER_LETTERS
-        }
-        return type
-    }
-
     private fun attemptAdd(dialog: AlertDialog) {
         val usernameView = dialog.findViewById<EditText>(R.id.account_username) ?: return
         val domainView = dialog.findViewById<EditText>(R.id.account_domain) ?: return
@@ -99,6 +82,11 @@ class AddAccountDialogFragment : DialogFragment() {
                 focus = lengthView
                 cancel = true
             }
+            !isPasswordLengthValid(length) -> {
+                lengthView.error = getString(R.string.error_invalid_password_length)
+                focus = lengthView
+                cancel = true
+            }
         }
 
         if (cancel) {
@@ -120,5 +108,26 @@ class AddAccountDialogFragment : DialogFragment() {
                         domainView.requestFocus()
                     }
         }
+    }
+
+    private fun isPasswordLengthValid(length: String): Boolean {
+        return try { length.toInt() in (1..32) } catch (_: Exception) { false }
+    }
+
+    private fun getCharType(numbers: CheckBox, symbols: CheckBox, lower: CheckBox, upper: CheckBox): Int {
+        var type = 0
+        if (numbers.isChecked) {
+            type = type or CharType.NUMBERS
+        }
+        if (symbols.isChecked) {
+            type = type or CharType.SYMBOLS
+        }
+        if (lower.isChecked) {
+            type = type or CharType.LOWER_LETTERS
+        }
+        if (upper.isChecked) {
+            type = type or CharType.UPPER_LETTERS
+        }
+        return type
     }
 }

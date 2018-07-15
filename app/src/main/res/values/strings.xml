@@ -71,6 +71,7 @@
     <string name="char_type_symbols">Symbols</string>
     <string name="char_type_lower_letters">Lower Letters</string>
     <string name="char_type_upper_letters">Upper Letters</string>
+    <string name="error_invalid_password_length">Please enter an integer in (0, 32]</string>
 
     <!-- Strings related to verify identity dialog -->
     <string name="title_dialog_verify_identity">Verify Identity</string>

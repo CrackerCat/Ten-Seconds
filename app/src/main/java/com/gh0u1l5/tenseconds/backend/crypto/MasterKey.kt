@@ -152,19 +152,21 @@ object MasterKey {
         }
         BiometricUtils.authenticate(context, cipher, object : BiometricUtils.AuthenticationCallback {
             override fun onSuccess(cipher: Cipher) {
-                val source = "$accountId#${account.address}".toByteArray()
+                val source = account.address.toByteArray()
                 val buffer = cipher.doFinal(source)
+                val digest = digestWithSHA256(buffer)
                 try {
                     val password = CharArray(account.specification.length)
                     val chars = account.specification.types.fromCharTypesToCharArray()
                     success(password.apply {
                         for (i in 0 until size) {
-                            val value = buffer[i % buffer.size].toInt() and 0xFF
+                            val value = digest[i % digest.size].toInt() and 0xFF
                             this[i] = chars[value % chars.size]
                         }
                     })
                 } finally {
                     buffer.erase()
+                    digest.erase()
                 }
             }
         })
