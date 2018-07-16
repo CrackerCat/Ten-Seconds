@@ -2,13 +2,13 @@ package com.gh0u1l5.tenseconds.backend.crypto
 
 import org.junit.Test
 
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.digestWithSHA256
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromHexStringToBytes
+import com.gh0u1l5.tenseconds.backend.crypto.ArrayUtils.digestWithSHA256
+import com.gh0u1l5.tenseconds.backend.crypto.ArrayUtils.fromBytesToHexString
+import com.gh0u1l5.tenseconds.backend.crypto.ArrayUtils.fromHexStringToBytes
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 
-class CryptoUtilsTests {
+class ArrayUtilsTests {
     @Test fun testDigestWithSHA256() {
         val caseA = "abcdefg".toByteArray() to "7D1A54127B222502F5B79B5FB0803061152A44F92B37E23C6527BAF665D4DA9A"
         val caseB = "1234567".toByteArray() to "8BB0CF6EB9B17D0F7D22B456F121257DC1254E1F01665370476383EA776DF414"

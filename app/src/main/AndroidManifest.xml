@@ -15,8 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
-            android:name="com.gh0u1l5.tenseconds.frontend.activities.MainActivity"
+            android:name=".frontend.activities.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
@@ -24,11 +25,21 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="g-ten-seconds.firebaseapp.com"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
+
         <activity
-            android:name="com.gh0u1l5.tenseconds.frontend.activities.LoginActivity"
+            android:name=".frontend.activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <service
             android:name=".backend.services.SafeZoneService"
             android:label="@string/title_safe_zone_service"
@@ -38,6 +49,7 @@
             </intent-filter>
             <meta-data android:name="android.accessibilityservice" android:resource="@xml/safe_zone_service" />
         </service>
+
     </application>
 
 </manifest>

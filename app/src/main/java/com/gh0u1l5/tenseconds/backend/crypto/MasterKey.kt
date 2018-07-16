@@ -7,11 +7,11 @@ import android.security.keystore.KeyProtection
 import android.util.Log
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Account
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoObjects.sAndroidKeyStore
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.digestWithSHA256
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.fromBytesToHexString
+import com.gh0u1l5.tenseconds.backend.crypto.ArrayUtils.digestWithSHA256
+import com.gh0u1l5.tenseconds.backend.crypto.ArrayUtils.fromBytesToHexString
 import com.gh0u1l5.tenseconds.backend.crypto.EraseUtils.erase
 import com.gh0u1l5.tenseconds.global.CharType.fromCharTypesToCharArray
+import com.gh0u1l5.tenseconds.global.TenSecondsApplication.Companion.sAndroidKeyStore
 import com.google.android.gms.tasks.Task
 import java.security.KeyStore
 import java.security.KeyStoreException
@@ -65,7 +65,7 @@ object MasterKey {
      * operation, this passphrase will be erased immediately.
      */
     private fun derive(identityId: String, passphrase: CharArray): ByteArray {
-        return CryptoUtils.scrypt(passphrase, identityId.toByteArray())
+        return Scrypt.derive(passphrase, identityId.toByteArray())
     }
 
     /**

@@ -3,7 +3,7 @@ package com.gh0u1l5.tenseconds.backend.crypto
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoObjects.sAndroidKeyStore
+import com.gh0u1l5.tenseconds.global.TenSecondsApplication.Companion.sAndroidKeyStore
 import java.security.Key
 import java.security.KeyStore
 import javax.crypto.Cipher

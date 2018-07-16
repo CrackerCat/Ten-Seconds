@@ -3,13 +3,7 @@ package com.gh0u1l5.tenseconds.backend.crypto
 import android.widget.EditText
 import java.security.MessageDigest
 
-object CryptoUtils {
-    init {
-        System.loadLibrary("crypto-engine")
-    }
-
-    class ScryptException: Exception()
-
+object ArrayUtils {
     /**
      * A [MessageDigest] object which can generate SHA-256 digests safely.
      * @hide
@@ -31,12 +25,6 @@ object CryptoUtils {
             sSHA256MessageDigest.reset()
         }
     }
-
-    /**
-     * Derives a 256-bit key using scrypt algorithm, with arguments N = 32768, r = 8, p = 1
-     */
-    @Throws(ScryptException::class)
-    external fun scrypt(password: CharArray, salt: ByteArray): ByteArray
 
     /**
      * Read a CharArray from EditText directly.

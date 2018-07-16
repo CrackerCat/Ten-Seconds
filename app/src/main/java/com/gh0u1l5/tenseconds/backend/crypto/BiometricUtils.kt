@@ -15,7 +15,7 @@ import android.support.annotation.RequiresApi
 import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import com.gh0u1l5.tenseconds.R
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoObjects.sAndroidKeyStore
+import com.gh0u1l5.tenseconds.global.TenSecondsApplication.Companion.sAndroidKeyStore
 import java.security.KeyStore
 import java.security.KeyStoreException
 import javax.crypto.Cipher

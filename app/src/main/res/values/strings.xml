@@ -32,13 +32,7 @@
 
     <!-- Strings related to login activity -->
     <string name="title_activity_login">Sign in</string>
-    <string name="action_sign_in">Login</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="error_invalid_email">This email is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_login_failed">The username not found or password incorrect</string>
+    <string name="prompt_login_loading">Login interface invoking, one more second......</string>
 
     <!-- Strings related to SafeZone service -->
     <string name="title_safe_zone_service">10s SafeZone</string>
@@ -58,6 +52,7 @@
     <string name="action_add_identity">Add</string>
     <string name="prompt_nickname">Nickname</string>
     <string name="prompt_passphrase">Passphrase</string>
+    <string name="error_field_required">This field is required</string>
     <string name="error_invalid_passphrase">Please enter a passphrase longer than 8</string>
 
     <!-- Strings related to add account dialog -->

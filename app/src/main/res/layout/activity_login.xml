@@ -20,14 +20,6 @@
         android:layout_margin="48dp"
         app:srcCompat="@mipmap/ic_launcher" />
 
-    <ProgressBar
-        android:id="@+id/login_loading"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
-
     <TextView
         android:id="@+id/login_invalid_message"
         android:layout_width="240dp"
@@ -40,64 +32,25 @@
         android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/login_form"
+        android:id="@+id/login_loading"
         android:layout_width="240dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/colorInputHintLight">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/background_dark_blue"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/colorInputLight"
-                android:textSize="20sp" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColorHint="@color/colorInputHintLight">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/background_dark_blue"
-                android:hint="@string/prompt_password"
-                android:imeActionId="6"
-                android:imeActionLabel="@string/action_sign_in"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/colorInputLight"
-                android:textSize="20sp" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:id="@+id/login_button"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@color/colorPrimaryDark"
-            android:text="@string/action_sign_in"
+            android:text="@string/prompt_login_loading"
+            android:textAlignment="center"
             android:textColor="@color/colorInputLight"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
 
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
     </LinearLayout>
 
 </LinearLayout>

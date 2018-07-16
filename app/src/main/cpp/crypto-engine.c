@@ -12,7 +12,7 @@
 #define KEY_LENGTH 32
 
 JNIEXPORT jbyteArray JNICALL
-Java_com_gh0u1l5_tenseconds_backend_crypto_CryptoUtils_scrypt(
+Java_com_gh0u1l5_tenseconds_backend_crypto_Scrypt_derive(
         JNIEnv* env,
         jobject obj,
         jcharArray passphrase,

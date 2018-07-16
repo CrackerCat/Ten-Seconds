@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import com.gh0u1l5.tenseconds.R
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.getPassword
+import com.gh0u1l5.tenseconds.backend.crypto.ArrayUtils.getPassword
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
 

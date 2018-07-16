@@ -12,7 +12,7 @@ import android.widget.ProgressBar
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Identity
-import com.gh0u1l5.tenseconds.backend.crypto.CryptoUtils.getPassword
+import com.gh0u1l5.tenseconds.backend.crypto.ArrayUtils.getPassword
 import com.gh0u1l5.tenseconds.backend.crypto.MasterKey
 import com.gh0u1l5.tenseconds.frontend.UIUtils.setDefaultButtonStyle
 
