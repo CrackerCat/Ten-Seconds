@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
+
 apply plugin: 'kotlin-android'
+
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -47,10 +49,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "com.google.firebase:firebase-core:16.0.1"
-    implementation 'com.google.firebase:firebase-auth:16.0.2'
-    implementation 'com.google.firebase:firebase-firestore:17.0.3'
+    implementation 'com.google.firebase:firebase-auth:16.0.3'
+    implementation 'com.google.firebase:firebase-firestore:17.1.0'
 
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
 //    implementation 'com.twitter.sdk.android:twitter-core:3.2.0'
 
     implementation "androidx.appcompat:appcompat:$androidx_version"
