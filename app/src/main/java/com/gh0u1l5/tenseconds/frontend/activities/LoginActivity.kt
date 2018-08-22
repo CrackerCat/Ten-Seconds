@@ -2,10 +2,10 @@ package com.gh0u1l5.tenseconds.frontend.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.global.Constants.RC_GOOGLE_SIGN_IN
@@ -15,7 +15,6 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
-
 
 /**
  * A login screen that offers login via username/password.

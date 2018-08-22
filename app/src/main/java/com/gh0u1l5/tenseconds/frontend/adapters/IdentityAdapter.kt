@@ -1,16 +1,16 @@
 package com.gh0u1l5.tenseconds.frontend.adapters
 
 import android.content.Intent
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.CardView
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Identity
@@ -65,7 +65,7 @@ class IdentityAdapter(
             inflate(R.layout.card_identity, parent, false) as CardView
         }).apply {
             list.layoutManager = LinearLayoutManager(parent.context)
-            add.setOnClickListener {
+            add.setOnClickListener { _ ->
                 val context = parent.context
                 val intent = Intent(context, MainActivity::class.java)
                 context.startActivity(intent.apply {
@@ -73,7 +73,7 @@ class IdentityAdapter(
                     putExtra("identityId", card.tag as? String)
                 })
             }
-            delete.setOnClickListener {
+            delete.setOnClickListener { _ ->
                 AlertDialog.Builder(parent.context)
                         .setTitle(R.string.title_dialog_delete_alert)
                         .setMessage(R.string.message_dialog_delete_alert)
@@ -96,7 +96,7 @@ class IdentityAdapter(
                         }
                         .show()
             }
-            lock.setOnClickListener {
+            lock.setOnClickListener { _ ->
                 val context = parent.context
                 val intent = Intent(context, MainActivity::class.java)
                 context.startActivity(intent.apply {

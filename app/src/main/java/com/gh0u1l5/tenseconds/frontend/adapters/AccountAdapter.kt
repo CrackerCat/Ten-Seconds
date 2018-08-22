@@ -1,12 +1,12 @@
 package com.gh0u1l5.tenseconds.frontend.adapters
 
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Account
@@ -71,7 +71,7 @@ class AccountAdapter(
                 }
                 return@setOnLongClickListener true
             }
-            delete.setOnClickListener {
+            delete.setOnClickListener { _ ->
                 AlertDialog.Builder(parent.context)
                         .setTitle(R.string.title_dialog_delete_alert)
                         .setMessage(R.string.message_dialog_delete_alert)

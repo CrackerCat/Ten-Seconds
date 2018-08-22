@@ -4,15 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Auth
 import com.gh0u1l5.tenseconds.backend.crypto.BiometricUtils
@@ -25,6 +24,7 @@ import com.gh0u1l5.tenseconds.frontend.fragments.VerifyIdentityDialogFragment
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_ACCOUNT
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_ADD_IDENTITY
 import com.gh0u1l5.tenseconds.global.Constants.ACTION_VERIFY_IDENTITY
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*

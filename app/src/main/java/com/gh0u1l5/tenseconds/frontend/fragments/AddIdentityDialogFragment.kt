@@ -2,13 +2,13 @@ package com.gh0u1l5.tenseconds.frontend.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.backend.api.Store
 import com.gh0u1l5.tenseconds.backend.bean.Identity
@@ -32,7 +32,7 @@ class AddIdentityDialogFragment : DialogFragment() {
                 .setPositiveButton(R.string.action_add_identity, null)
                 .setNegativeButton(R.string.action_cancel) { dialog, _ -> dialog.cancel() }
                 .create().apply {
-                    setOnShowListener {
+                    setOnShowListener { _ ->
                         setDefaultButtonStyle(activity!!)
                         val positive = getButton(AlertDialog.BUTTON_POSITIVE)
                         positive.setOnClickListener { attemptAdd(this) }

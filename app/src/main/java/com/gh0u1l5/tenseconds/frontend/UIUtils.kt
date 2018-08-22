@@ -1,8 +1,8 @@
 package com.gh0u1l5.tenseconds.frontend
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.gh0u1l5.tenseconds.R
 
 object UIUtils {

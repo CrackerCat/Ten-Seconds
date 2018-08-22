@@ -11,9 +11,9 @@ import android.os.Build
 import android.os.CancellationSignal
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
-import android.support.annotation.RequiresApi
-import android.support.v7.app.AlertDialog
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import com.gh0u1l5.tenseconds.R
 import com.gh0u1l5.tenseconds.global.TenSecondsApplication.Companion.sAndroidKeyStore
 import java.security.KeyStore
