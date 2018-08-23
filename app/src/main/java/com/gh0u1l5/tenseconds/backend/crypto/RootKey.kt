@@ -29,7 +29,7 @@ object RootKey {
 
                 setUserAuthenticationRequired(true)
                 setUserAuthenticationValidityDurationSeconds(-1)
-                if (Build.VERSION.SDK_INT >= 28) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     setIsStrongBoxBacked(true) // TODO: this has to be checked.
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
