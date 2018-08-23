@@ -150,7 +150,7 @@ object MasterKey {
                 if (it < accountId.length) accountId[it].toByte() else it.toByte()
             }))
         }
-        BiometricUtils.authenticate(context, cipher, object : BiometricUtils.AuthenticationCallback {
+        val callback = object : BiometricUtils.AuthenticationCallback {
             override fun onSuccess(cipher: Cipher) {
                 val source = account.address.toByteArray()
                 val buffer = cipher.doFinal(source)
@@ -169,7 +169,12 @@ object MasterKey {
                     digest.erase()
                 }
             }
-        })
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            BiometricUtils.authenticate(context, cipher, callback)
+        } else {
+            BiometricUtils.authenticateLegacy(context, cipher, callback)
+        }
     }
 
     /**

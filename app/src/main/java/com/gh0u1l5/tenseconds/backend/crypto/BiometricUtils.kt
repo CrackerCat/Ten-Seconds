@@ -60,60 +60,66 @@ object BiometricUtils {
         return true
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun authenticate(context: Context, cipher: Cipher, callback: AuthenticationCallback) {
         val cancel = context.getString(R.string.action_cancel)
         val cancelSignal = CancellationSignal()
-        if (Build.VERSION.SDK_INT >= 28) {
-            val crypto = BiometricPrompt.CryptoObject(cipher)
-            val executor = AsyncTask.THREAD_POOL_EXECUTOR
-            val prompt = BiometricPrompt.Builder(context)
-                    .setTitle(context.getString(R.string.biometric_prompt_title))
-                    .setDescription(context.getString(R.string.biometric_prompt_description))
-                    .setNegativeButton(cancel, executor, DialogInterface.OnClickListener { dialog, _ ->
-                        dialog.cancel()
-                        cancelSignal.cancel()
-                    })
-                    .build()
-            prompt.authenticate(crypto, cancelSignal, executor, object : BiometricPrompt.AuthenticationCallback() {
-                @RequiresApi(28)
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    callback.onSuccess(result.cryptoObject.cipher)
+        val crypto = BiometricPrompt.CryptoObject(cipher)
+        val executor = AsyncTask.THREAD_POOL_EXECUTOR
+
+        val prompt = BiometricPrompt.Builder(context)
+                .setTitle(context.getString(R.string.biometric_prompt_title))
+                .setDescription(context.getString(R.string.biometric_prompt_description))
+                .setNegativeButton(cancel, executor, DialogInterface.OnClickListener { dialog, _ ->
+                    dialog.cancel()
+                    cancelSignal.cancel()
+                })
+                .build()
+
+        prompt.authenticate(crypto, cancelSignal, executor, object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                callback.onSuccess(result.cryptoObject.cipher)
+            }
+        })
+    }
+
+    fun authenticateLegacy(context: Context, cipher: Cipher, callback: AuthenticationCallback) {
+        val cancel = context.getString(R.string.action_cancel)
+        val cancelSignal = CancellationSignal()
+        val crypto = FingerprintManager.CryptoObject(cipher)
+
+        val dialog = AlertDialog.Builder(context)
+                .setIcon(R.drawable.ic_fingerprint)
+                .setTitle(R.string.biometric_prompt_title)
+                .setMessage(R.string.biometric_prompt_description)
+                .setNegativeButton(cancel) { dialog, _ ->
+                    dialog.cancel()
+                    cancelSignal.cancel()
                 }
-            })
-        } else {
-            val crypto = FingerprintManager.CryptoObject(cipher)
-            val dialog = AlertDialog.Builder(context)
-                    .setIcon(R.drawable.ic_fingerprint)
-                    .setTitle(R.string.biometric_prompt_title)
-                    .setMessage(R.string.biometric_prompt_description)
-                    .setNegativeButton(cancel) { dialog, _ ->
-                        dialog.cancel()
-                        cancelSignal.cancel()
+                .show()
+
+        val fm = context.getSystemService(FingerprintManager::class.java)
+        fm.authenticate(crypto, cancelSignal, 0, object : FingerprintManager.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult) {
+                dialog.dismiss()
+                callback.onSuccess(result.cryptoObject.cipher)
+            }
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                when (errorCode) {
+                    FingerprintManager.FINGERPRINT_ERROR_CANCELED,
+                    FingerprintManager.FINGERPRINT_ERROR_USER_CANCELED -> return
+                    FingerprintManager.FINGERPRINT_ERROR_NO_FINGERPRINTS -> {
+                        callback.onNoBiometrics(context, errString)
                     }
-                    .show()
-            val fm = context.getSystemService(FingerprintManager::class.java)
-            fm.authenticate(crypto, cancelSignal, 0, object : FingerprintManager.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult) {
-                    dialog.dismiss()
-                    callback.onSuccess(result.cryptoObject.cipher)
-                }
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
-                    when (errorCode) {
-                        FingerprintManager.FINGERPRINT_ERROR_CANCELED,
-                        FingerprintManager.FINGERPRINT_ERROR_USER_CANCELED -> return
-                        FingerprintManager.FINGERPRINT_ERROR_NO_FINGERPRINTS -> {
-                            callback.onNoBiometrics(context, errString)
-                        }
-                        FingerprintManager.FINGERPRINT_ERROR_HW_NOT_PRESENT -> {
-                            callback.onHardwareNotPresent(context, errString)
-                        }
-                        else -> {
-                            Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
-                        }
+                    FingerprintManager.FINGERPRINT_ERROR_HW_NOT_PRESENT -> {
+                        callback.onHardwareNotPresent(context, errString)
                     }
-                    dialog.dismiss()
+                    else -> {
+                        Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
+                    }
                 }
-            }, null)
-        }
+                dialog.dismiss()
+            }
+        }, null)
     }
 }
