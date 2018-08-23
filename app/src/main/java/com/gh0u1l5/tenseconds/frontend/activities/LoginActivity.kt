@@ -49,14 +49,20 @@ class LoginActivity : AppCompatActivity() {
                         .addOnSuccessListener {
                             finish()
                         }
-                        .addOnFailureListener { e ->
-                            Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
-                            Log.w(javaClass.simpleName, e)
+                        .addOnFailureListener {
+                            report(it)
                         }
-            } catch (e: Exception) {
-                Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
-                Log.w(javaClass.simpleName, e)
+            } catch (e: ApiException) {
+                when (e.statusCode) {
+                    12501, 12502 -> { /* Ignore */ }
+                    else -> report(e)
+                }
             }
         }
+    }
+
+    private fun report(e: Exception) {
+        Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
+        Log.w(javaClass.simpleName, e)
     }
 }
