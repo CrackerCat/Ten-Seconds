@@ -18,13 +18,14 @@ class SafeZoneService : AccessibilityService() {
         private val cleaner = Runnable {
             password?.apply { password = null; erase() }
         }
-        private val handler = Handler(HandlerThread("cleaner").run { start();looper })
+        private val handler = Handler(HandlerThread("cleaner").run { start(); looper })
 
         @Volatile private var password: CharArray? = null
 
         fun notify(password: CharArray) {
             cleaner.run()
             handler.removeCallbacks(cleaner)
+
             this.password = password
             handler.postDelayed(cleaner, PASSWORD_SURVIVE_INTERVAL)
         }
