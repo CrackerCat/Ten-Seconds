@@ -60,7 +60,7 @@ class AccountAdapter(
         return ViewHolder(LayoutInflater.from(parent.context).run {
             inflate(R.layout.line_account, parent, false) as LinearLayout
         }).apply {
-            address.setOnLongClickListener {
+            address.setOnLongClickListener { _ ->
                 val accountId = line.tag as? String
                 val account = data?.get(accountId)
                 if (accountId != null && account != null) {
